@@ -1,0 +1,26 @@
+{
+  "name": "LumiereJs",               
+  "version": "0.0.1",
+  "author": "vvision <email></email>",
+  "description": "LumiereJs is a way to manage your favorite videos, make playlist, keeping data on your own server.",
+  "license": "GNU GPL3",                           
+  "engine": {                               
+    "node": "&gt;=0.4"
+  },
+  "main": "./lib/example.js",                
+  "bin": {
+    "my-command": "./bin/example"             
+  },
+  "dependencies" : {                      
+    "express": "3.0",
+    "async": "0.1.18"
+  },
+  "devDependencies": {                       
+    "mocha": "1.2.0",                       
+    "chai": "1.0.4",
+    "request": ""
+  },
+  "scripts": {                    
+    "test": " mocha -R spec ./test/*.js"
+  }
+}
