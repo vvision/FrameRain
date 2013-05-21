@@ -2,8 +2,9 @@ var express = require('express');
 var app = express();
 var fs = require('fs');
 var async = require('async');
+var url = require('url');
 
-
+//TODO: Maybe check the existence of video.txt
 //TODO: Conf. To be moved
 var port = 8080;
 var file = 'video.txt';
@@ -25,13 +26,20 @@ app.listen(port, 'localhost', function () {
 
 //Add the url of the video to the file
 app.post('/add', function (req, res, next) {
-	var url = req.body.url;
-	console.log(url);
-	fs.appendFile(file, url + '\n', 'utf8', function (err) {
+	var uri = req.body.url;
+	var str;
+	var remote = url.parse(uri, true);
+	console.log(remote);
+	if(remote.hostname === "www.youtube.com") {
+		str = "1:" + remote.query.v + ",";
+		console.log(str);
+	}
+	fs.appendFile(file, str + '\n', 'utf8', function (err) {
 		if (err) throw err;
-		console.log('The "data to append" was appended to file!');
+		console.log('The "data to append" was appended to file!: ' + str);
 		res.send(200);
 	});
+	
 });
 
 //Add the url of the video to the file
