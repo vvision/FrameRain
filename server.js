@@ -49,5 +49,26 @@ app.get('/video', function (req, res, next) {
 		console.log(data);
 		res.send(data);
 	});
-	
+});
+
+//Create a new selection file
+app.post('/createselection', function(req, res, next) {
+	var name = req.body.selectionName;
+console.log(name);
+	if(name) {
+		fs.writeFile('selection/' + name, '', function (err) {
+  		if (err) throw err;
+console.log('It\'s saved!');
+  		res.send(200);
+		});
+	}
+});
+
+//Return the list of the existing selection
+app.get('/selections', function(req, res, next) {
+	fs.readdir('selection', function (err, files) {
+		if(!files) res.send('NULL');
+console.log(files);
+		res.send(files);
+	});
 });
