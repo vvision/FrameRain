@@ -13,6 +13,9 @@ Egalement possible avec hqdefault.jpg
 Récupérer un xml de donnée
 http://gdata.youtube.com/feeds/api/videos/-dQlc20k7Dc
 
+Json is even better:
+http://gdata.youtube.com/feeds/api/videos/ylLzyHk54Z0?v=2&alt=jsonc
+
 STRUCTURE OF FILE video.txt
 
 Type:ID

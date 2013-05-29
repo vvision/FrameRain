@@ -3,9 +3,11 @@ var app = express();
 var fs = require('fs');
 var async = require('async');
 var url = require('url');
+var request = require('request');
 
 //TODO: Maybe check the existence of video.txt
 //TODO: Conf. To be moved
+//TODO: Check existence of the public/img/ directory
 var port = 8080;
 var file = 'video.txt';
 
@@ -30,20 +32,30 @@ app.post('/add', function (req, res, next) {
 	var str;
 	var remote = url.parse(uri, true);
 	console.log(remote);
-	if(remote.hostname === "www.youtube.com") {
-		str = "1:" + remote.query.v + ",";
-		console.log(str);
+	//TODO: Get title and store it
+	var title;
+	var id;
+	if(remote.hostname === 'www.youtube.com') {
+		id = remote.query.v;
+		title = getTitle('http://gdata.youtube.com/feeds/api/videos/' + id + '?v=2&alt=jsonc', function(videoTitle) {
+			title = videoTitle;
+			str = '1::' + id + '::' + title + ',';
+			link2Picture = 'https://i2.ytimg.com/vi/' + id + '/sddefault.jpg'
+			console.log(str);
+			
+			fs.appendFile(file, str + '\n', 'utf8', function (err) {
+				if (err) throw err;
+				console.log('The "data to append" was appended to file!: ' + str);
+				//Retireve picture and save
+				savePicture(link2Picture, id);
+				res.send(200);
+			});
+		});
 	}
-	fs.appendFile(file, str + '\n', 'utf8', function (err) {
-		if (err) throw err;
-		console.log('The "data to append" was appended to file!: ' + str);
-		res.send(200);
-	});
-	
 });
 
 //Add the url of the video to the file
-app.get('/video', function (req, res, next) {
+app.get('/listvideos', function (req, res, next) {
 	fs.readFile(file, function (err, data) {
 		if (err) throw err;
 		console.log(data);
@@ -72,3 +84,42 @@ console.log(files);
 		res.send(files);
 	});
 });
+
+//Add a video to an existing selection
+app.post('/addtoselection', function(req, res, next) {
+	var videoId = req.body.idVideo;
+	var selectionId = req.body.idSeletion;
+	fs.writeFile('selection/' + selectionId, videoId + ',', function (err) {
+ 		if (err) throw err;
+console.log('It\'s saved!');
+ 		res.send(200);
+	});
+});
+
+//Get all videos related to a selection
+app.get('/getselection', function(req, res, next) {
+	res.send(200);
+});
+
+//Delete an existing selection
+app.get('/deleteselection', function(req, res, next) {
+	var selectionName = req.body.idSelection;
+	fs.unlink('selection/' + selectionName, function (err) {
+  	if (err) throw err;
+  	console.log('successfully deleted /selection/' + selectionName);
+		res.send(200);
+	});
+});
+
+function savePicture(link, id) {
+  request(link).pipe(fs.createWriteStream('./public/img/' + id + '.jpg'));
+}
+
+function getTitle(link, callback) {
+	request(link, function (error, response, body) {
+		if (!error && response.statusCode == 200) {
+		  var title = JSON.parse(body).data.title;
+		}
+		callback(title);
+	});
+}
