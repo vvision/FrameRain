@@ -1,4 +1,6 @@
 LumiereJs by Victor VOISIN
+FrameRain
+LightningRain
 
 LumiereJs is a way to manage your favorite videos, make playlist, keeping data on your own server.
 
@@ -18,8 +20,8 @@ http://gdata.youtube.com/feeds/api/videos/ylLzyHk54Z0?v=2&alt=jsonc
 
 STRUCTURE OF FILE video.txt
 
-Type:ID
-1:RNv2Eb0PfHU
+Type::ID::Title
+1::RNv2Eb0PfHU::Get Lucky
 Where 1 = youtube, 2 = dailymotion, 3 = vimeo, ...
 
 

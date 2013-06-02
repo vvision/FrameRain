@@ -40,7 +40,7 @@ app.post('/add', function (req, res, next) {
 		title = getTitle('http://gdata.youtube.com/feeds/api/videos/' + id + '?v=2&alt=jsonc', function(videoTitle) {
 			title = videoTitle;
 			str = '1::' + id + '::' + title + ',';
-			link2Picture = 'https://i2.ytimg.com/vi/' + id + '/sddefault.jpg'
+			link2Picture = 'https://i2.ytimg.com/vi/' + id + '/hqdefault.jpg';//hqdefault.jpg or sddefault.jpg
 			console.log(str);
 			
 			fs.appendFile(file, str + '\n', 'utf8', function (err) {

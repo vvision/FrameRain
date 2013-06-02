@@ -38,24 +38,25 @@ define([
   'js/view/footerView',
   'js/view/mainView',
   'js/view/videoView',
-  'js/view/selectionView'
-], function(Backbone, HeaderView, FooterView, MainView, VideoView, SelectionView) {
+  'js/view/selectionView',
+  'js/view/addView'
+], function(Backbone, HeaderView, FooterView, MainView, VideoView, SelectionView, AddView) {
 
 	var Router = Backbone.Router.extend({
 		routes: {
 			"":						"video",
-			"video":			"video",
+			"add":			"add",
 			"selection":	"selection"
 		},
 	
-		main: function () {
-			$('#header').html(new HeaderView().render().el);
-			$('#main').html(new MainView().render().el);
-			$('#footer').html(new FooterView().render().el);
-		},
 		video: function () {
 			$('#header').html(new HeaderView().render().el);
 			$('#main').html(new VideoView().render().el);
+			$('#footer').html(new FooterView().render().el);
+		},
+		add: function () {
+			$('#header').html(new HeaderView().render().el);
+			$('#main').html(new AddView().render().el);
 			$('#footer').html(new FooterView().render().el);
 		},
 		selection: function () {
