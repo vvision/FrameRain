@@ -7,9 +7,9 @@ define([
 ], function($, Backbone, Hogan, VideoListTemplate, VideoTemplate) {
 
 	return Backbone.View.extend({
-		initialize: function () {
+		initialize: function (options) {
 		this.displayVideos();
-			
+
 		},
 			
 		events: {

@@ -54,7 +54,7 @@ app.post('/add', function (req, res, next) {
 	}
 });
 
-//Add the url of the video to the file
+//list video
 app.get('/listvideos', function (req, res, next) {
 	fs.readFile(file, function (err, data) {
 		if (err) throw err;
@@ -98,7 +98,13 @@ console.log('It\'s saved!');
 
 //Get all videos related to a selection
 app.get('/getselection', function(req, res, next) {
-	res.send(200);
+		console.log(req);
+	var selectionName = req.query.idSelection;
+	fs.readFile('selection/' + selectionName, function (err, data) {
+		if (err) throw err;
+		console.log(data);
+		res.send(data);
+	});
 });
 
 //Delete an existing selection

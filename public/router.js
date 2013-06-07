@@ -46,7 +46,8 @@ define([
 		routes: {
 			"":						"video",
 			"add":			"add",
-			"selection":	"selection"
+			"selection":	"selection",
+			"selection/:id": "selection"
 		},
 	
 		video: function () {
@@ -59,9 +60,9 @@ define([
 			$('#main').html(new AddView().render().el);
 			$('#footer').html(new FooterView().render().el);
 		},
-		selection: function () {
+		selection: function (id) {
 			$('#header').html(new HeaderView().render().el);
-			$('#main').html(new SelectionView().render().el);
+			$('#main').html(new SelectionView({id: id}).render().el);
 			$('#footer').html(new FooterView().render().el);
 		}
 	});

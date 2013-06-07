@@ -42,5 +42,8 @@ API Specification:
 		
 * /deleteselection		GET			Delete a selection
 		idSelection
+
+* /getselection			GET 		Retrieve videos of a given selection
+	idSelection
 		
 * /selections					GET			Return the list of the selections (from directory selections; 1 file = 1 selection)		
