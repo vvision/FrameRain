@@ -5,38 +5,106 @@ define([
   'text!templates/videoList.html',
   'text!templates/video.html'
 ], function($, Backbone, Hogan, VideoListTemplate, VideoTemplate) {
+	
+
 
 	return Backbone.View.extend({
 		initialize: function (options) {
-		this.displayVideos();
-
+			if(options != null && options.id != undefined) {
+			console.log("TRUE");
+				this.nameSelection = options.id;
+				this.videoSelection = [];
+				this.displayVideos(this.nameSelection);
+			} else {
+				this.displayVideos();
+		  }
+		  
+		  	this.list = options.list;
+		  	this.playlist = options.playlist;
+		  
 		},
 			
 		events: {
-			'click img': 'playVideo'
+			'click img': 'playVideo',
+			'click .playAll': 'playList',
+			'click .add': 'addToPlaylist'
 		},
 		
-		playVideo: function (e) {//TODO Create new view for the player
+		playVideo: function (e) {
 			var id = e.currentTarget.className;
-			$('.videoList').empty();
-			$('.videoList').append('<iframe width="560" height="315" src="http://www.youtube.com/embed/' + id + '?rel=0&autoplay=1" frameborder="0" allowfullscreen></iframe>');
+			router.navigate('play/' + id, true);
 		},
 		
-		displayVideos: function () {
+		playList: function() {
+			router.navigate('play', true);//Just playing the first video from the list
+			//$('.selectionList').empty();
+			//$('.selectionList').append('<iframe width="560" height="315" src="http://www.youtube.com/embed/?rel=0&autoplay=1&playlist=' + this.videoSelection.join(',') +'" frameborder="0" allowfullscreen></iframe>');
+		},
+		
+		addToPlaylist: function(e) {
+			console.log(this.list);
+			var className = e.currentTarget.className.split(' ');
+			var id = className[0].trim();
+			console.log(id);
+			var video = this.list.findWhere({videoId: id});
+			console.log(video);
+			this.playlist.add(video);
+			console.log(this.playlist);
+		},
+		
+		displayVideos: function (idSelection) {
+		var self = this;
 			$('.videoList').empty();//Clean all render
 			
-			$.ajax({
-					url: "/listvideos",
-					type: "GET",
-					success: function (data) {
-						console.log(data);
-						var dataString = data.toString();
-						var arrayVideo = dataString.split(',');
-						arrayVideo.forEach(function (element) {
-console.log(element);
-							var video = element.split('::');
-							if(video[1] != undefined) {
-							var link2Picture = 'img/' + video[1] + '.jpg';
+			if(idSelection == undefined) {
+				$.ajax({
+						url: "/listvideos",
+						type: "GET",
+						success: function (data) {
+							console.log(data);
+							var dataString = data.toString();
+							var arrayVideo = dataString.split(',');
+							arrayVideo.forEach(function (element) {
+	console.log(element);
+								var video = element.split('::');
+								if(video[1] != undefined) {
+								var link2Picture = 'img/' + video[1] + '.jpg';
+								self.list.add({site: video[0], videoId: video[1], title: video[2]});//TODO: Site contains \n BAD!
+								//console.log(self.list.get("5dbEhBKGOtY"));
+									$('.videoList').append(Hogan.compile(VideoTemplate).render({
+										site: video[0],
+										id: video[1],
+										title: video[2],
+										pictureLink: link2Picture
+									}));
+								}
+							});
+						},
+						error: function(err) {
+							console.log(err);
+						}
+				});
+			} else {
+				this.videoSelection = [];
+				$.ajax({
+						url: "/getselection",
+						type: "GET",
+						data: {
+							idSelection: idSelection
+						},
+						success: function (data) {
+							console.log(data);
+							var dataString = data.toString();
+							var arrayVideo = dataString.split(',');								
+							$('.videoList').append('<h4 class="playAll">Tout Voir</h4>');
+							arrayVideo.forEach(function (element) {
+	console.log(element);
+								var video = element.split('::');
+								if(video[1] != undefined) {
+								var link2Picture = 'img/' + video[1] + '.jpg';
+
+								self.videoSelection.push(video[1]);//Hum, it seems it's the same thing as below
+								self.list.add({site: video[0], videoId: video[1], title: video[2]});//TODO: Site contains \n BAD!
 								$('.videoList').append(Hogan.compile(VideoTemplate).render({
 									site: video[0],
 									id: video[1],
@@ -47,9 +115,10 @@ console.log(element);
 						});
 					},
 					error: function(err) {
-					  console.log(err);
+						console.log(err);
 					}
-			});
+				});
+			}
 		},
 		
 		render: function () {

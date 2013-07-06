@@ -46,4 +46,9 @@ API Specification:
 * /getselection			GET 		Retrieve videos of a given selection
 	idSelection
 		
-* /selections					GET			Return the list of the selections (from directory selections; 1 file = 1 selection)		
+* /selections					GET			Return the list of the selections (from directory selections; 1 file = 1 selection)
+
+TODO:
+* New route: /integrate POST 	Retrieve bookmarked videos from a profile
+							userId
+							website

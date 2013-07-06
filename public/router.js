@@ -6,14 +6,15 @@ requirejs.config({
   	 }
   },
   paths: {
-    'backbone': 'js/lib/backbone-0.9.2',
+    'backbone': 'js/lib/backbone',
     'jquery': 'js/lib/jquery-1.8.2.min',
     'iframeTransport': 'js/lib/jquery.iframe-transport',
     'underscore': 'js/lib/underscore-1.4.3',
     'text': 'js/lib/text-2.0.3',
     'mocha': 'js/lib/mocha',
     'hogan': 'js/lib/hogan-3.0.0.amd',
-    'i18n': 'i18n'
+    'i18n': 'i18n',
+    'youtubePlayer': 'js/lib/youtubePlayer'
   },
   shim: {
     'backbone': {
@@ -26,6 +27,9 @@ requirejs.config({
     'iframeTransport': {
     	deps: ['jquery']
     },
+    'youtubePlayer': {
+    	deps: ['jquery']
+    },
     'underscore': {
     	exports: '_'
     }
@@ -36,23 +40,45 @@ define([
   'backbone',
   'js/view/headerView',
   'js/view/footerView',
-  'js/view/mainView',
   'js/view/videoView',
   'js/view/selectionView',
-  'js/view/addView'
-], function(Backbone, HeaderView, FooterView, MainView, VideoView, SelectionView, AddView) {
+  'js/view/addView',
+  'js/view/playVideo'
+], function(Backbone, HeaderView, FooterView, VideoView, SelectionView, AddView, PlayVideoView) {
+	
+		var Video = Backbone.Model.extend({
+		defaults: {
+            site: 0,
+            videoId: null,
+            title: null
+        }
+    });
+  
+  var VideoList = Backbone.Collection.extend({
+  	model: Video		
+  });
+  
+  var list = new VideoList();
+   var playlist = new VideoList();
 
 	var Router = Backbone.Router.extend({
 		routes: {
 			"":						"video",
 			"add":			"add",
 			"selection":	"selection",
-			"selection/:id": "selection"
+			"play/:id": "playVideo",
+			"play": "playVideo",
+			":name": "video",
 		},
 	
-		video: function () {
+		video: function (name) {
 			$('#header').html(new HeaderView().render().el);
-			$('#main').html(new VideoView().render().el);
+			$('#main').html(new VideoView({id: name, list: list, playlist: playlist}).render().el);
+			$('#footer').html(new FooterView().render().el);
+		},
+		playVideo: function (id) {
+			$('#header').html(new HeaderView().render().el);
+			$('#main').html(new PlayVideoView({id: id, list: list, playlist: playlist}).render().el);
 			$('#footer').html(new FooterView().render().el);
 		},
 		add: function () {
@@ -60,9 +86,9 @@ define([
 			$('#main').html(new AddView().render().el);
 			$('#footer').html(new FooterView().render().el);
 		},
-		selection: function (id) {
+		selection: function () {
 			$('#header').html(new HeaderView().render().el);
-			$('#main').html(new SelectionView({id: id}).render().el);
+			$('#main').html(new SelectionView().render().el);
 			$('#footer').html(new FooterView().render().el);
 		}
 	});
