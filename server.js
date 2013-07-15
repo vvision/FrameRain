@@ -39,7 +39,7 @@ app.post('/add', function (req, res, next) {
 		id = remote.query.v;
 		title = getTitle('http://gdata.youtube.com/feeds/api/videos/' + id + '?v=2&alt=jsonc', function(videoTitle) {
 			title = videoTitle;
-			str = '1::' + id + '::' + title + ',';
+			str = '1::' + id + '::' + title;
 			link2Picture = 'https://i2.ytimg.com/vi/' + id + '/hqdefault.jpg';//hqdefault.jpg or sddefault.jpg
 			console.log(str);
 			
@@ -117,8 +117,94 @@ app.get('/deleteselection', function(req, res, next) {
 	});
 });
 
-function savePicture(link, id) {
+//Integrate existing list from an existing website
+app.get('/integrate', function(req, res, next) {
+	var userId= req.body.userId;
+	var site = req.body.site;
+	var link1;
+	var links = [];
+	var favorites;
+	var total;
+	console.log(req.body);//////////////////////////
+	
+	if(site == 1) {
+		link1 = 'http://gdata.youtube.com/feeds/api/users/' + userId + '/favorites?alt=json&max-results=1';
+		console.log(link1);
+		request(link1, function (error, response, body) {
+			if (!error && response.statusCode == 200) {
+				total = JSON.parse(body).feed.openSearch$totalResults.$t;
+				console.log('TOTAL:' + total);
+				var j = 1;
+				do {
+					links.push('http://gdata.youtube.com/feeds/api/users/' + userId + '/favorites?alt=json&max-results=50&start-index=' + j);
+					j += 50;
+				} while(j <= total);
+				console.log(links);
+				
+				
+				//Let's retrieve all favorites!
+				async.forEach(links, function(element, cb) {		
+						
+					request(element, function (error, response, body) {
+						if (!error && response.statusCode == 200) {
+							favorites = JSON.parse(body).feed.entry;//Array containing favorites
+							
+							//Adding each video to the existing list	//TODO: Option to erase previous list or merge!
+							async.forEach(favorites, function(el, cb) {		
+								//SAME AS IN /add
+								var remote = url.parse(el.link[0].href, true);
+								console.log(remote);
+								var title;
+								var id;
+								if(remote.hostname === 'www.youtube.com') {
+									id = remote.query.v;
+									title = getTitle('http://gdata.youtube.com/feeds/api/videos/' + id + '?v=2&alt=jsonc', function(videoTitle) {
+										title = videoTitle;
+										if(title != undefined) {//Avoid retrieving favorites corresponding to unavailable videos
+											str = '1::' + id + '::' + title;
+											var link2Picture = 'https://i2.ytimg.com/vi/' + id + '/hqdefault.jpg';//hqdefault.jpg or sddefault.jpg
+											console.log(str);
+											
+											fs.appendFile(file, str + '\n', 'utf8', function (err) {
+												if (err) throw err;
+												console.log('The "data to append" was appended to file!: ' + str);
+												//Retireve picture and save
+												savePicture(link2Picture, id, function() {
+													next();	
+												});
+
+											});
+										}
+									});
+								}
+							},
+							function(err) {
+								res.send('error');
+							});
+							
+							//res.send(favorites);
+						}
+					});
+
+				},
+				function(err) {
+					res.send('error');
+				});
+				res.send(200);
+			}
+		});
+		
+	} else {
+		res.send(404);
+	}
+
+});
+
+function savePicture(link, id, cb) {
   request(link).pipe(fs.createWriteStream('./public/img/' + id + '.jpg'));
+  request(link).on("end", function() {
+    cb();
+  });
 }
 
 function getTitle(link, callback) {

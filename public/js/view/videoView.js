@@ -63,7 +63,7 @@ define([
 						success: function (data) {
 							console.log(data);
 							var dataString = data.toString();
-							var arrayVideo = dataString.split(',');
+							var arrayVideo = dataString.split('\n');
 							arrayVideo.forEach(function (element) {
 	console.log(element);
 								var video = element.split('::');
