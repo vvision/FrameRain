@@ -3,8 +3,9 @@ define([
   'backbone',
   'hogan',
   'text!templates/videoList.html',
-  'text!templates/video.html'
-], function($, Backbone, Hogan, VideoListTemplate, VideoTemplate) {
+  'text!templates/video.html',
+    'js/view/playlistView',
+], function($, Backbone, Hogan, VideoListTemplate, VideoTemplate, PlaylistView) {
 	
 
 
@@ -21,24 +22,19 @@ define([
 		  
 		  	this.list = options.list;
 		  	this.playlist = options.playlist;
+		  	
+		  	$('#playlist').html(new PlaylistView({playlist: this.playlist}).render().el);
 		  
 		},
 			
 		events: {
 			'click img': 'playVideo',
-			'click .playAll': 'playList',
 			'click .add': 'addToPlaylist'
 		},
 		
 		playVideo: function (e) {
 			var id = e.currentTarget.className;
 			router.navigate('play/' + id, true);
-		},
-		
-		playList: function() {
-			router.navigate('play', true);//Just playing the first video from the list
-			//$('.selectionList').empty();
-			//$('.selectionList').append('<iframe width="560" height="315" src="http://www.youtube.com/embed/?rel=0&autoplay=1&playlist=' + this.videoSelection.join(',') +'" frameborder="0" allowfullscreen></iframe>');
 		},
 		
 		addToPlaylist: function(e) {
