@@ -44,8 +44,9 @@ define([
   'js/view/selectionView',
   'js/view/addView',
   'js/view/playVideo',
-  'js/view/loginView'
-], function(Backbone, HeaderView, FooterView, VideoView, SelectionView, AddView, PlayVideoView, LoginView) {
+  'js/view/loginView',
+  'js/view/integrationView'
+], function(Backbone, HeaderView, FooterView, VideoView, SelectionView, AddView, PlayVideoView, LoginView, IntegrationView) {
 	
 		var Video = Backbone.Model.extend({
 		defaults: {
@@ -64,12 +65,13 @@ define([
 
 	var Router = Backbone.Router.extend({
 		routes: {
-			"":						"video",
-			"add":			"add",
+			"": "video",
+			"add": "add",
 			"selection":	"selection",
 			"play/:id": "playVideo",
 			"play": "playVideo",
-			"login":				"login",
+			"login": "login",
+			"integration": "integration",
 			":name": "video"
 		},
 	
@@ -91,6 +93,11 @@ define([
 		selection: function () {
 			$('#header').html(new HeaderView().render().el);
 			$('#main').html(new SelectionView().render().el);
+			$('#footer').html(new FooterView().render().el);
+		},
+		integration: function () {
+			$('#header').html(new HeaderView().render().el);
+			$('#main').html(new IntegrationView().render().el);
 			$('#footer').html(new FooterView().render().el);
 		},
 		login: function () {

@@ -161,14 +161,21 @@ app.get('/deleteselection', function(req, res, next) {
 });
 
 //Integrate existing list from an existing website
-app.get('/integrate', checkAuth, function(req, res, next) {
+//option: 0 -> Erase previous favorites. 1 -> Append
+app.post('/integrate', checkAuth, function(req, res, next) {
 	var userId= req.body.userId;
 	var site = req.body.site;
+	var option = req.body.option;
 	var link1;
 	var links = [];
 	var favorites;
 	var total;
-	console.log(req.body);//////////////////////////
+
+	if(option == 0) {
+		//Erase previous content of the file
+		fs.unlinkSync(file);
+		fs.writeFileSync(file, '');
+	}
 	
 	if(site == 1) {
 		link1 = 'http://gdata.youtube.com/feeds/api/users/' + userId + '/favorites?alt=json&max-results=1';

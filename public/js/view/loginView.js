@@ -42,6 +42,7 @@ define([
 					$('.auth').css('visibility', 'visible');
 					$('.loginLink', this.el).css('visibility', 'hidden');
 					//Change view to show login is complete
+					router.navigate('/', true);
 				},
 				error: function(err) {
 					console.log(err);
