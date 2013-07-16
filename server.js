@@ -14,6 +14,8 @@ var file = 'video.txt';
 app.use(express.logger());
 app.use(express.bodyParser({uploadDir:'./tmp'}));
 //app.use(express.favicon(__dirname + '/public/favicon.ico'))
+app.use(express.cookieParser());
+app.use(express.cookieSession({ secret: 'ASYDctgfeDKFLS646', cookie: { maxAge: 60 * 60 * 1000 }}));
 app.use(app.router); 
 app.use(express.static('./public'));
 app.use(function(req, res) {
@@ -24,10 +26,50 @@ app.listen(port, 'localhost', function () {
   console.log('Server running on port ' + port);
 });
 
+//Auth
+//Function to add to routes
+function checkAuth(req, res, next) {
+	if (req.session.authed) {
+		next();
+	} else {
+		//res.redirect('/');
+		res.send(401);
+	}
+}
 
+//Respond to user auth request by sending a token if the credentials are correct.
+app.post('/auth', function (req, res, next) {
+	var login = req.body.login;
+	var password = req.body.password;
+console.log(login + ' ' + password);
+	if (req.session.auth) {
+       // Already logged in.
+    } else {
+		fs.readFile('passwd.json', {'encoding': 'utf8'},function (err, data) {
+			if(err) console.log(err);//TODO Change
+	
+			var credential = JSON.parse(data);
+	console.log(credential);
+			if(login === credential.login && password === credential.password) {
+				req.session.username = login;
+				req.session.password = password;
+				req.session.authed = true;
+				res.send('OK');
+			} else {
+				res.send(403);
+			}
+		});
+	}
+});
 
+app.post('/logout', checkAuth, function (req, res, next) {
+	req.session = null;
+	res.send(200);
+});
+
+//API
 //Add the url of the video to the file
-app.post('/add', function (req, res, next) {
+app.post('/add', checkAuth, function (req, res, next) {
 	var uri = req.body.url;
 	var str;
 	var remote = url.parse(uri, true);
@@ -47,8 +89,9 @@ app.post('/add', function (req, res, next) {
 				if (err) throw err;
 				console.log('The "data to append" was appended to file!: ' + str);
 				//Retireve picture and save
-				savePicture(link2Picture, id);
-				res.send(200);
+				savePicture(link2Picture, id, function() {
+					res.send(200);	
+				});
 			});
 		});
 	}
@@ -64,7 +107,7 @@ app.get('/listvideos', function (req, res, next) {
 });
 
 //Create a new selection file
-app.post('/createselection', function(req, res, next) {
+app.post('/createselection', checkAuth, function(req, res, next) {
 	var name = req.body.selectionName;
 console.log(name);
 	if(name) {
@@ -86,7 +129,7 @@ console.log(files);
 });
 
 //Add a video to an existing selection
-app.post('/addtoselection', function(req, res, next) {
+app.post('/addtoselection', checkAuth, function(req, res, next) {
 	var videoId = req.body.idVideo;
 	var selectionId = req.body.idSeletion;
 	fs.writeFile('selection/' + selectionId, videoId + ',', function (err) {
@@ -118,7 +161,7 @@ app.get('/deleteselection', function(req, res, next) {
 });
 
 //Integrate existing list from an existing website
-app.get('/integrate', function(req, res, next) {
+app.get('/integrate', checkAuth, function(req, res, next) {
 	var userId= req.body.userId;
 	var site = req.body.site;
 	var link1;

@@ -14,7 +14,8 @@ define([
 		events: {
 			'click .english': 'langEn',
 			'click .french': 'langFr',
-			'click .german': 'langDe'
+			'click .german': 'langDe',
+			'click .disconnect': 'logout'
 		},
 		
 		//Maybe if localeStorage isn't available, use window. instead
@@ -32,6 +33,25 @@ define([
 			localStorage.setItem('locale', 'de');
 			location.reload();
 		},
+		
+		logout: function () {
+			//Request to server to delete token		
+				$.ajax({
+					type: 'POST',
+					url: '/logout',
+					success: function (res, status, jqXHR) {
+						
+					},
+					error: function (err) {
+						console.error(err);
+					}
+				});
+			sessionStorage.removeItem("login");
+			sessionStorage.removeItem("password");
+
+			$('.credential').empty();
+			router.navigate('/', true);
+		},
 	
 		render: function () {
 			this.$el.html(Hogan.compile(HeaderTemplate).render({
@@ -39,6 +59,15 @@ define([
 				video: "video",
 				selection: "seletion"
 			}));
+			
+			if(sessionStorage.getItem("login")) {
+				$('.credential', this.el).text(sessionStorage.getItem("login"));
+			}
+			if(sessionStorage.getItem("login") && sessionStorage.getItem("password")) {
+				//Change CSS to display links and infos
+				$('.auth', this.el).css('visibility', 'visible');
+				$('.loginLink', this.el).css('visibility', 'hidden');
+			}
 			
 			return this;
 		}

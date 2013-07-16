@@ -43,8 +43,9 @@ define([
   'js/view/videoView',
   'js/view/selectionView',
   'js/view/addView',
-  'js/view/playVideo'
-], function(Backbone, HeaderView, FooterView, VideoView, SelectionView, AddView, PlayVideoView) {
+  'js/view/playVideo',
+  'js/view/loginView'
+], function(Backbone, HeaderView, FooterView, VideoView, SelectionView, AddView, PlayVideoView, LoginView) {
 	
 		var Video = Backbone.Model.extend({
 		defaults: {
@@ -68,7 +69,8 @@ define([
 			"selection":	"selection",
 			"play/:id": "playVideo",
 			"play": "playVideo",
-			":name": "video",
+			"login":				"login",
+			":name": "video"
 		},
 	
 		video: function (name) {
@@ -89,6 +91,11 @@ define([
 		selection: function () {
 			$('#header').html(new HeaderView().render().el);
 			$('#main').html(new SelectionView().render().el);
+			$('#footer').html(new FooterView().render().el);
+		},
+		login: function () {
+			$('#header').html(new HeaderView().render().el);
+			$('#main').html(new LoginView().render().el);
 			$('#footer').html(new FooterView().render().el);
 		}
 	});
