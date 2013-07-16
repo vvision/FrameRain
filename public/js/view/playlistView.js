@@ -14,6 +14,7 @@ define([
 			
 			this.listenTo(this.playlist, 'add', this.renderNewVideo);
 			this.listenTo(this.playlist, 'remove', this.removeFromView);
+			this.listenTo(this.playlist, 'reset', this.resetPlaylistView);
 		},
 			
 		events: {
@@ -40,6 +41,10 @@ define([
 		removeFromView: function(video) {
 			$('.videoPlaylist .' + video.attributes.videoId).remove();
 			console.log('Trying to remove');
+		},
+		
+		resetPlaylistView: function() {
+			$('.playlist').empty();
 		},
 		
 		removeFromCollection: function(e) {

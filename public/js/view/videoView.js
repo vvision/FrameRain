@@ -29,12 +29,21 @@ define([
 			
 		events: {
 			'click img': 'playVideo',
-			'click .add': 'addToPlaylist'
+			'click .add': 'addToPlaylist',
+			'click .playSelection': 'playSelection'
 		},
 		
 		playVideo: function (e) {
 			var id = e.currentTarget.className;
 			router.navigate('play/' + id, true);
+		},
+		
+		playSelection: function() {
+			this.playlist.reset();
+			while(this.list.length > 0) {
+				this.playlist.add(this.list.shift());
+			}
+			router.navigate('play', true);
 		},
 		
 		addToPlaylist: function(e) {
@@ -91,8 +100,8 @@ define([
 						success: function (data) {
 							console.log(data);
 							var dataString = data.toString();
-							var arrayVideo = dataString.split(',');								
-							$('.videoList').append('<h4 class="playAll">Tout Voir</h4>');
+							var arrayVideo = dataString.split('\n');								
+							$('.videoList').append('<h4 class="playSelection">Tout Voir</h4>');
 							arrayVideo.forEach(function (element) {
 	console.log(element);
 								var video = element.split('::');
