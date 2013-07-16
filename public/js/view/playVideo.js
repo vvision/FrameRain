@@ -29,10 +29,16 @@ define([
 				console.log(video);
 				//$('.player').empty();
 				//ytPlayer.playVideo($('.player', context.$el)[0], video.attributes.videoId, context, context.playNextVideo);
+				context.updateTitle(video.attributes.title);
 				player.loadVideoById(video.attributes.videoId);
 			} else {
 				return ;
 			}
+		},
+		
+		updateTitle: function(title) {
+				$('.titlePlaying').empty();
+				$('.titlePlaying').append(title);
 		},
 		
 		render: function () {
@@ -43,6 +49,7 @@ define([
 			if(this.playlist.length > 0) {
 				var video = this.playlist.shift();
 				console.log(video.attributes.videoId);
+				$('.titlePlaying', this.$el).append(video.attributes.title);
 				ytPlayer.playVideo($('#player', this.$el)[0], video.attributes.videoId, this, this.playNextVideo);
 			} else {
 				ytPlayer.playVideo($('#player', this.$el)[0], this.videoId, this, function() {});
