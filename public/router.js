@@ -92,7 +92,7 @@ define([
 		},
 		selection: function () {
 			$('#header').html(new HeaderView().render().el);
-			$('#main').html(new SelectionView().render().el);
+			$('#main').html(new SelectionView({playlist: playlist}).render().el);
 			$('#footer').html(new FooterView().render().el);
 		},
 		integration: function () {

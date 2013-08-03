@@ -50,6 +50,11 @@ define([
 			sessionStorage.removeItem("password");
 
 			$('.credential').empty();
+			//Change CSS to hide links and infos
+			$('.auth', this.el).css('visibility', 'hidden');
+			$('.rm').css('visibility', 'hidden');
+			$('.loginLink', this.el).css('visibility', 'visible');
+			
 			router.navigate('/', true);
 		},
 	

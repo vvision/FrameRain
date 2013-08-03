@@ -4,12 +4,16 @@ define([
   'hogan',
   'text!templates/selectionList.html',
   'text!templates/selection.html',
-    'text!templates/video.html'
-], function($, Backbone, Hogan, SelectionListTemplate, SelectionTemplate, VideoTemplate) {
+  'text!templates/video.html',
+  'js/view/playlistView'
+], function($, Backbone, Hogan, SelectionListTemplate, SelectionTemplate, VideoTemplate, PlaylistView) {
 
 	return Backbone.View.extend({
 		initialize: function (options) {
 			this.displaySelection();
+			
+			this.playlist = options.playlist;	  	
+		  	$('#playlist').html(new PlaylistView({playlist: this.playlist}).render().el);
 		},
 			
 		events: {

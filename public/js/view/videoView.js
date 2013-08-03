@@ -4,7 +4,7 @@ define([
   'hogan',
   'text!templates/videoList.html',
   'text!templates/video.html',
-    'js/view/playlistView',
+  'js/view/playlistView',
 ], function($, Backbone, Hogan, VideoListTemplate, VideoTemplate, PlaylistView) {
 	
 
@@ -84,6 +84,7 @@ define([
 									}));
 								}
 							});
+							self.displayRemoveOption();
 						},
 						error: function(err) {
 							console.log(err);
@@ -118,6 +119,7 @@ define([
 								}));
 							}
 						});
+							displayRemoveOption();
 					},
 					error: function(err) {
 						console.log(err);
@@ -126,11 +128,21 @@ define([
 			}
 		},
 		
+		displayRemoveOption: function() {
+			if(sessionStorage.getItem("login") && sessionStorage.getItem("password")) {
+				//Change CSS to display links and infos
+				$('.rm', this.el).css('visibility', 'visible');
+			} else {
+				$('.rm', this.el).css('visibility', 'hidden');
+			}
+		},
+		
 		render: function () {
 			this.$el.html(Hogan.compile(VideoListTemplate).render({
 
 			}));
-				
+			
+			
 			return this;
 		}
 	});

@@ -4,8 +4,16 @@
 
 <div class="forms">
 		<form enctype="multipart/form-data" method='post'>
-		<label for="user">UserID</label>
-		<input type="text" name="user" class="user" placeholder="User ID" size="42" />
-		<input type="button" value="Send" class="userID"/>
+			<select id="site" name="site">
+			<option value="1" selected>Youtube</option>
+			<option value="2">Dailymotion(Not Yet Supported)</option>
+			</select>
+			</br>
+			<input type="radio" name="option" value="0" checked="">Erase Previous</br>
+			<input type="radio" name="option" value="1">Append Favorites
+			</br>
+			<label for="user">UserID</label>
+			<input type="text" name="user" class="user" placeholder="User ID" size="42" />
+			<input type="button" value="Send" class="userID"/>
 		</form>
 </div>

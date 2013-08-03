@@ -25,9 +25,9 @@ define([
 				url: '/integrate',
 				type: 'POST',				
 				data: {
-					site: 1,
+					site: $('#site').val(),
 					userId: $(':text.user').val(),
-					option: 0
+					option: $('input:radio[name=option]:checked').val()
 				},
 				success: function (res, status, jqXHR) {
 					$('.msg').empty().append(jqXHR.responseText);
