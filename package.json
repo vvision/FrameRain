@@ -18,7 +18,8 @@
   "devDependencies": {                       
     "mocha": "1.2.0",                       
     "chai": "1.0.4",
-    "request": ""
+    "request": "",
+    "mongoose": ""
   },
   "scripts": {                    
     "test": " mocha -R spec ./test/*.js"

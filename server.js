@@ -4,8 +4,10 @@ var fs = require('fs');
 var async = require('async');
 var url = require('url');
 var request = require('request');
+var db = require('./model/db');
+var mongoose = require('mongoose');
+var Video = mongoose.model('Video');
 
-//TODO: Maybe check the existence of video.txt
 //TODO: Conf. To be moved
 //TODO: Check existence of the public/img/ directory
 var port = 8080;
@@ -74,20 +76,20 @@ app.post('/add', checkAuth, function (req, res, next) {
 	var str;
 	var remote = url.parse(uri, true);
 	console.log(remote);
-	//TODO: Get title and store it
-	var title;
 	var id;
 	if(remote.hostname === 'www.youtube.com') {
 		id = remote.query.v;
-		title = getTitle('http://gdata.youtube.com/feeds/api/videos/' + id + '?v=2&alt=jsonc', function(videoTitle) {
-			title = videoTitle;
-			str = '1::' + id + '::' + title;
+		getTitle('http://gdata.youtube.com/feeds/api/videos/' + id + '?v=2&alt=jsonc', function(videoTitle) {
 			link2Picture = 'https://i2.ytimg.com/vi/' + id + '/hqdefault.jpg';//hqdefault.jpg or sddefault.jpg
-			console.log(str);
+			var video = new Video({
+			    title: videoTitle,
+			    site: 1,
+			    videoId: id
+			});
 			
-			fs.appendFile(file, str + '\n', 'utf8', function (err) {
+			insert(video, function (err) {
 				if (err) throw err;
-				console.log('The "data to append" was appended to file!: ' + str);
+				console.log('The "data to append" was insert in DB!' );
 				//Retireve picture and save
 				savePicture(link2Picture, id, function() {
 					res.send(200);	
@@ -97,19 +99,35 @@ app.post('/add', checkAuth, function (req, res, next) {
 	}
 });
 
+function insert(el, cb) {
+  el.save(function (err, data) {
+      if (err) console.log(err);
+    console.log(data);
+    cb(err);
+  });
+}
+
 //Remove a video from the list 
 //TODO: Should also remove the video from selection where it appears.
 app.post('/remove', /*checkAuth,*/ function (req, res, next) {
-		
-		
+	var id = req.query.video;
+	if(id) {
+      Video.remove({videoId: id}, function(err) {
+          res.send('Removed!');
+      });
+    } else {
+      res.send('Missing parameter id!');
+    }
 });
 
 //list video
 app.get('/listvideos', function (req, res, next) {
-	fs.readFile(file, function (err, data) {
-		if (err) throw err;
-		console.log(data);
-		res.send(data);
+    var start = req.query.start;
+	var limit = req.query.limit;
+	
+	Video.find(function (err, docs) {
+		console.log(docs);
+		res.send(docs);
 	});
 });
 
@@ -180,8 +198,9 @@ app.post('/integrate', checkAuth, function(req, res, next) {
 
 	if(option == 0) {
 		//Erase previous content of the file
-		fs.unlinkSync(file);
-		fs.writeFileSync(file, '');
+		Video.remove({}, function() {
+		
+		});
 	}
 	
 	if(site == 1) {
@@ -214,25 +233,24 @@ app.post('/integrate', checkAuth, function(req, res, next) {
 								var title;
 								var id;
 								if(remote.hostname === 'www.youtube.com') {
-									id = remote.query.v;
-									title = getTitle('http://gdata.youtube.com/feeds/api/videos/' + id + '?v=2&alt=jsonc', function(videoTitle) {
-										title = videoTitle;
-										if(title != undefined) {//Avoid retrieving favorites corresponding to unavailable videos
-											str = '1::' + id + '::' + title;
-											var link2Picture = 'https://i2.ytimg.com/vi/' + id + '/hqdefault.jpg';//hqdefault.jpg or sddefault.jpg
-											console.log(str);
-											
-											fs.appendFile(file, str + '\n', 'utf8', function (err) {
-												if (err) throw err;
-												console.log('The "data to append" was appended to file!: ' + str);
-												//Retireve picture and save
-												savePicture(link2Picture, id, function() {
-													next();	
-												});
-
-											});
-										}
-									});
+								  id = remote.query.v;
+                                  getTitle('http://gdata.youtube.com/feeds/api/videos/' + id + '?v=2&alt=jsonc', function(videoTitle) {
+                                    link2Picture = 'https://i2.ytimg.com/vi/' + id + '/hqdefault.jpg';//hqdefault.jpg or sddefault.jpg
+                                    var video = new Video({
+                                        title: videoTitle,
+                                        site: 1,
+                                        videoId: id
+                                    });
+                                    
+                                    insert(video, function (err) {
+                                      if (err) throw err;
+                                      console.log('The "data to append" was insert in DB!' );
+                                      //Retireve picture and save
+                                      savePicture(link2Picture, id, function() {
+                                        next();
+                                      });
+                                    });
+                                  });
 								}
 							},
 							function(err) {

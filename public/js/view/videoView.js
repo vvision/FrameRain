@@ -67,22 +67,17 @@ define([
 						type: "GET",
 						success: function (data) {
 							console.log(data);
-							var dataString = data.toString();
-							var arrayVideo = dataString.split('\n');
-							arrayVideo.forEach(function (element) {
-	console.log(element);
-								var video = element.split('::');
-								if(video[1] != undefined) {
-								var link2Picture = 'img/' + video[1] + '.jpg';
-								self.list.add({site: video[0], videoId: video[1], title: video[2]});//TODO: Site contains \n BAD!
-								//console.log(self.list.get("5dbEhBKGOtY"));
-									$('.videoList').append(Hogan.compile(VideoTemplate).render({
-										site: video[0],
-										id: video[1],
-										title: video[2],
-										pictureLink: link2Picture
-									}));
-								}
+							data.forEach(function (el) {
+	console.log(el);
+                            var link2Picture = 'img/' + el.videoId+ '.jpg';
+                            self.list.add({site: el.site, videoId: el.videoId, title: el.title});
+                            $('.videoList').append(Hogan.compile(VideoTemplate).render({
+                                site: el.site,
+                                id: el.videoId,
+                                title: el.title,
+                                pictureLink: link2Picture
+                            }));
+								
 							});
 							self.displayRemoveOption();
 						},
