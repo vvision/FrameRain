@@ -97,6 +97,13 @@ app.post('/add', checkAuth, function (req, res, next) {
 	}
 });
 
+//Remove a video from the list 
+//TODO: Should also remove the video from selection where it appears.
+app.post('/remove', /*checkAuth,*/ function (req, res, next) {
+		
+		
+});
+
 //list video
 app.get('/listvideos', function (req, res, next) {
 	fs.readFile(file, function (err, data) {
