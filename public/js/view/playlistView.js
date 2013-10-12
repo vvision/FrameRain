@@ -23,9 +23,9 @@ define([
 		},
 		
 		playAll: function() {
+		  if(this.playlist.length != 0) {
 			router.navigate('play', true);
-			//$('.selectionList').empty();
-			//$('.selectionList').append('<iframe width="560" height="315" src="http://www.youtube.com/embed/?rel=0&autoplay=1&playlist=' + this.videoSelection.join(',') +'" frameborder="0" allowfullscreen></iframe>');
+		  }
 		},
 		
 		renderNewVideo: function(last) {

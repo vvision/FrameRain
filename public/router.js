@@ -78,32 +78,32 @@ define([
 		video: function (name) {
 			$('#header').html(new HeaderView().render().el);
 			$('#main').html(new VideoView({id: name, list: list, playlist: playlist}).render().el);
-			$('#footer').html(new FooterView().render().el);
+			//$('#footer').html(new FooterView().render().el);
 		},
 		playVideo: function (id) {
 			$('#header').html(new HeaderView().render().el);
 			$('#main').html(new PlayVideoView({id: id, list: list, playlist: playlist}).render().el);
-			$('#footer').html(new FooterView().render().el);
+			//$('#footer').html(new FooterView().render().el);
 		},
 		add: function () {
 			$('#header').html(new HeaderView().render().el);
 			$('#main').html(new AddView().render().el);
-			$('#footer').html(new FooterView().render().el);
+			//$('#footer').html(new FooterView().render().el);
 		},
 		selection: function () {
 			$('#header').html(new HeaderView().render().el);
 			$('#main').html(new SelectionView({playlist: playlist}).render().el);
-			$('#footer').html(new FooterView().render().el);
+			//$('#footer').html(new FooterView().render().el);
 		},
 		integration: function () {
 			$('#header').html(new HeaderView().render().el);
 			$('#main').html(new IntegrationView().render().el);
-			$('#footer').html(new FooterView().render().el);
+			//$('#footer').html(new FooterView().render().el);
 		},
 		login: function () {
 			$('#header').html(new HeaderView().render().el);
 			$('#main').html(new LoginView().render().el);
-			$('#footer').html(new FooterView().render().el);
+			//$('#footer').html(new FooterView().render().el);
 		}
 	});
 	
