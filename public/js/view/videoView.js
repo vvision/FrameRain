@@ -23,7 +23,7 @@ define([
 		  	this.list = options.list;
 		  	this.playlist = options.playlist;
 		  	
-		  	$('#playlist').html(new PlaylistView({playlist: this.playlist}).render().el);
+		  	
 		  
 		},
 			
@@ -34,7 +34,8 @@ define([
 		},
 		
 		playVideo: function (e) {
-			var id = e.currentTarget.className;
+			var className = e.currentTarget.className.split(' ');
+			var id = className[0].trim();
 			router.navigate('play/' + id, true);
 		},
 		

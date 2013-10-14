@@ -10,19 +10,6 @@
    Base styles: opinionated defaults
    ========================================================================== */
 
-html,
-button,
-input,
-select,
-textarea {
-    color: #222;
-}
-
-body {
-    font-size: 1em;
-    line-height: 1.4;
-}
-
 /*
  * Remove text-shadow in selection highlight: h5bp.com/i
  * These selection declarations have to be separate.
@@ -119,20 +106,14 @@ body {
   display:inline-block;
 }
 
-.remove {
-  background-image: url(./img/x_14x14.png);
-  height: 14px;
-  width: 14px;
-  display: inline-block;
-  vertical-align: middle;
-}
-
+/*
 .home {
   background-image: url(./img/home_32x32.png);
   height: 32px;
   width: 32px;
   display:inline-block;
 }
+*/
 
 .title{
   margin: 5% 10%;
@@ -140,30 +121,187 @@ body {
   display:inline-block;
 }
 
+img {
+   padding:1px;
+   border:1px solid #021a40;
+}
+
+#main {
+  position: absolute;
+  top: 105px;
+}
+
+
+header  {
+  position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    height: 50px;
+    margin: 0px;
+    background-color: rgb(51, 51, 51);
+    border-bottom: 1px solid rgb(17, 17, 17);
+        border-bottom-width: 1px;
+        border-bottom-style: solid;
+        border-bottom-color: rgb(17, 17, 17);
+    z-index: 400;
+}
+
+#header {
+  vertical-align: center;
+  margin: 10px;
+}
+
+.framerain {
+  font-size: 2em;
+}
+
+.headerRight {
+  float: right;
+  display:inline-block;
+}
+
+.picture {
+  position: relative;
+}
+
+.picture:hover .playHover{
+  display: block
+}
+
+.playHover {
+  position : absolute;
+    display: none;
+    top: 20%; 
+    width: 24px;
+    margin: 0 auto; left:0px;
+    right: 0px;
+    z-index: 100;
+}
+
+
+/*
+** PLAYLIST
+*/
+.playlist  {
+  position: fixed;
+    top: 55px;
+    left: 0px;
+    right: 0px;
+    height: 50px;
+    margin: 0px;
+    background-color: rgb(51, 51, 51);
+    border-bottom: 1px solid rgb(17, 17, 17);
+        border-bottom-width: 1px;
+        border-bottom-style: solid;
+        border-bottom-color: rgb(17, 17, 17);
+    z-index: 400;
+}
+
+.videoPlaylist {
+  display: inline-block;
+  width: 140px;
+  height: 50px;
+}
+
+.playlistContent {
+  display: inline-block;
+}
+
 .titlePlaylist {
-  margin: 2% 2%;
-  text-align:center;
+  margin: 2px 2px;
+  text-align: left;
+  display: inline-block;
+  list-style: none outside none;
+  width: auto;
+  max-width: 82px;
+  padding-top: 7px;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: bold;
 }
 
 .pixPlaylist {
   text-align: center;
+  width: 45px;
+  height: 45px;
+  display:inline-block;
 }
 
-img {
-   padding:1px;
-   border:1px solid #021a40;
-   background-color: #2e52a4;
+.remove {
+  vertical-align: middle;
+  display: inline-block;
 }
 
-main {
-  flex: 1;
+.ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-#playlist {
-   height: 800px;
+.arrowLeft, .arrowRight, .playAll {
+  margin: 9px 0px 9px 5px;
+  display: inline-block;
+}
+.arrowRight {
+  float: right;
+}
+.arrowLeft, .playAll {
+  float: left;
 }
 
+/*
+** PLAYER
+*/
+
+.playing {
+  text-align: center;
+  vertical-align: middle;
+  margin-top: 40%;
+  margin-left: 50%;
+}
+
+
+/*
+** FOOTER
+*/
 footer.Footer {
+  text-align: center;
+  vertical-align: center;
+  background: none repeat scroll 0% 0% rgb(64, 64, 64);
+    background-color: rgb(64, 64, 64);
+    background-image: none;
+    background-repeat: repeat;
+    background-attachment: scroll;
+    background-position: 0% 0%;
+    background-clip: border-box;
+    background-origin: padding-box;
+    background-size: auto auto;
+color: rgb(153, 153, 153);
+font-size: 0.85em;
+  
+  display: block;
+  position: fixed;
+  height: 60px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  border-top: 1px solid rgb(0, 0, 0);
+      border-top-width: 1px;
+      border-top-style: solid;
+      border-top-color: rgb(0, 0, 0);
+  z-index: 11000;
+  transition: all 0.3s ease 0s;
+      transition-property: all;
+      transition-duration: 0.3s;
+      transition-timing-function: ease;
+      transition-delay: 0s;
+  transform: translateZ(0px);
+}
+
+
+
+/*footer.Footer {
     display: flex;
 -moz-box-orient: vertical;
 -moz-box-direction: normal;
@@ -193,7 +331,7 @@ background: none repeat scroll 0% 0% rgb(64, 64, 64);
 color: rgb(153, 153, 153);
 font-size: 0.85em;
 text-align: center;
-}
+}*/
 
 
 
