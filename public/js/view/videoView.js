@@ -28,7 +28,7 @@ define([
 		},
 			
 		events: {
-			'click img': 'playVideo',
+			'click .picture': 'playVideo',
 			'click .add': 'addToPlaylist',
 			'click .playSelection': 'playSelection'
 		},
