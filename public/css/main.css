@@ -226,10 +226,9 @@ header  {
 */
 
 .playing {
+  margin-top: 15%;
   text-align: center;
   vertical-align: middle;
-  margin-top: 40%;
-  margin-left: 50%;
 }
 
 

@@ -15,7 +15,12 @@ define([
 			'click .english': 'langEn',
 			'click .french': 'langFr',
 			'click .german': 'langDe',
-			'click .disconnect': 'logout'
+			'click .disconnect': 'logout',
+			'click .hide': 'hidePlaylist'
+		},
+		
+		hidePlaylist: function() {
+		 $('.playlistPosition') .fadeToggle('slow');
 		},
 		
 		//Maybe if localeStorage isn't available, use window. instead

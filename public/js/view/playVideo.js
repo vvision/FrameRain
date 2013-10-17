@@ -27,8 +27,6 @@ define([
 				var video = context.playlist.shift();
 				console.log("444");
 				console.log(video);
-				//$('.player').empty();
-				//ytPlayer.playVideo($('.player', context.$el)[0], video.attributes.videoId, context, context.playNextVideo);
 				context.updateTitle(video.attributes.title);
 				player.loadVideoById(video.attributes.videoId);
 			} else {
