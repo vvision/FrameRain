@@ -122,8 +122,9 @@ img {
 }
 
 #main {
-  position: absolute;
-  top: 105px;
+  margin-top: 115px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 
@@ -237,11 +238,9 @@ header  {
 */
 footer.Footer {
   text-align: center;
-  vertical-align: center;
   background: none repeat scroll 0% 0% rgb(64, 64, 64);
   color: rgb(153, 153, 153);
   font-size: 0.85em;
-  
   display: block;
   position: fixed;
   height: 60px;
