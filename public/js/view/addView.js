@@ -8,6 +8,7 @@ define([
 
 
 	return Backbone.View.extend({
+	    className: 'addBox',
 		initialize: function () {
 		},
 			
@@ -16,9 +17,9 @@ define([
 			'click :button.selectionName': 'onClickSelection'
 		},
 		
-		onClickVideo: function () {
+		onClickVideo: function (e) {
 			var self = this;
-			
+			e.preventDefault();
 console.log($(':text.url').serializeArray());//////////////////////////////////////////////////////////
 			var params = $(':text.url').serializeArray();	
 			//params.push({name: "login", value: sessionStorage.getItem("login")});

@@ -1,15 +1,13 @@
-<h1>{{title}}</h1>
 
 <div class="msg"></div>
 
+
 <div class="forms">
-		<form enctype="multipart/form-data" method='post'>
-		<label for="login">{{login}}</label>
-		<input type="text" name="login" class="login" size="30" maxlength="25" />
-		<br/>
-		<label for="password">{{password}}</label>
-		<input type="password" name="password" class="password" size="30"/>
-		<br/>
-		<input type="button" value="{{connect}}" class="validation"/>
+		<form enctype="multipart/form-data" novalidate="novalidate" method='post'>
+		<div class="loginContent">
+		<input type="text" name="login" class="login"  autocorrect="off" placeholder="Username" />
+		<input type="password" name="password" class="password" placeholder="Password"/>
+		</div>
+		<button class="validation" type="submit">Log in</button>
 		</form>
 </div>

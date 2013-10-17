@@ -23,6 +23,7 @@ define([
 			this.listenTo(this.playlist, 'add', this.renderNewVideo);
 			this.listenTo(this.playlist, 'remove', this.removeFromView);
 			this.listenTo(this.playlist, 'reset', this.resetPlaylistView);
+			
 		},
 			
 		events: {

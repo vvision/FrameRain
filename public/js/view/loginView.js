@@ -7,16 +7,17 @@ define([
 
 
 	return Backbone.View.extend({
-			
+		className: 'loginBox',
 		initialize: function (options) {
 
 		},
 			
 		events: {
-			'click input.validation': 'tryAuth' 
+			'click button.validation': 'tryAuth' 
 		},
 		
-		tryAuth: function () {
+		tryAuth: function (e) {
+		    e.preventDefault();
 			console.log('click');
 			$.ajax({
 				url: '/auth' ,
@@ -54,7 +55,6 @@ define([
 			this.$el.html(Hogan.compile(LoginTemplate).render({
 				login: 'login',
 				password: 'password',
-				title: 'Login',
 				connect: 'connect'
 			}));
 			return this;

@@ -1,12 +1,12 @@
-<h1>{{add}}</h1>
 
 <div class="msg"></div>
 
 <div class="forms">
-		<form enctype="multipart/form-data" method='post'>
-		<label for="url">{{url}}</label>
-		<input type="text" name="url" class="url" placeholder="{{urlSample}}" size="42" />
-		<input type="button" value="{{send}}" class="videoUrl"/>
+		<form enctype="multipart/form-data" novalidate="novalidate"  method='post'>
+		<div class="addContent">
+		<input type="text" name="url" class="url" autocorrect="off"  placeholder="Url"/>
+		<button class="videoUrl validation" type="submit">Add</button>
+		</div>
 		</form>
 </div>
 <!--

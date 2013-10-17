@@ -82,12 +82,103 @@ textarea {
 body {
   background-color: black;
   color: white;
-  
-  display: flex;
-  min-height: 100vh;
-  flex-direction: column;
+}
+
+#main {
+  margin-top: 115px;
+  margin-left: auto;
+  margin-right: auto;
 }
    
+/*
+** LOGIN
+*/
+
+.loginBox { 
+  max-width: 600px;
+  margin: 0px auto;
+  vertical-align: middle;
+  left: 0px;
+  right: 0px;
+}
+
+.loginContent, .addContent {
+  margin: 0px 0px 5px;
+  float: left;
+  display: inline-block;
+}
+
+.login {
+  display: inline-block;
+  clear: both;
+  margin: 0px 5px 0px 0px;
+  padding: 8px 0px 8px 8px;
+  width: 216px;
+  position: relative;
+  border: medium none;
+  color: rgb(255, 255, 255);
+  font-size: 1.1em;
+  font-weight: 200;
+  background: none repeat scroll 0% 0% rgb(64, 64, 64);
+}
+
+.password, .url  {
+  display: inline-block;
+  clear: both;
+  margin: 0px;
+  padding: 8px 0px 8px 8px;
+  width: 216px;
+  position: relative;
+  border: medium none;
+  color: rgb(255, 255, 255);
+  font-size: 1.1em;
+  font-weight: 200;
+  background: none repeat scroll 0% 0% rgb(64, 64, 64);
+}
+
+.validation {
+  width: 85px;
+  height: 36px;
+  margin: 0px 0px 0px 10px;
+  padding: 0.5em 1.37em;
+  min-height: 30px;
+  min-width: 80px;
+  box-shadow: 0px 1px 0px rgba(255, 255, 255, 0.15) inset;
+  background: none repeat scroll 0% 0% rgb(91, 164, 229);
+  -moz-box-sizing: border-box;
+  display: inline-block;
+  cursor: pointer;
+  color: rgb(255, 255, 255);
+  font-size: 11px;
+  line-height: 13px;
+  font-weight: 300;
+  text-align: center;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-shadow: none;
+  border-radius: 0.2em 0.2em 0.2em 0.2em;
+  border: 0.1em solid rgba(0, 0, 0, 0.05);
+  transition: background 0.3s ease 0s, border-color 0.3s ease 0s;
+}
+
+.validation:hover{
+      background: none repeat scroll 0% 0% rgb(47, 140, 222);
+      border-color: transparent;
+      text-decoration: none;
+}
+
+.addBox { 
+  max-width: 400px;
+  margin: 0px auto;
+  vertical-align: middle;
+  left: 0px;
+  right: 0px;
+}
+
+/*
+** VIDEOLIST
+*/
+
 .auth {
 	visibility: hidden;
 }
@@ -106,27 +197,18 @@ body {
 .videoEl {
   height: 128px;
   width: 500px;
+  margin: 0px auto;
 }
 
 .picture {
   display: inline-block;
+  padding:1px;
+  border:1px solid #021a40;
 }
 
 .picture:hover {
   border:1px solid rgb(87, 163, 232);
 }
-
-img {
-   padding:1px;
-   border:1px solid #021a40;
-}
-
-#main {
-  margin-top: 115px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
 
 header  {
   position: fixed;
@@ -255,6 +337,8 @@ footer.Footer {
 .footerText {
  margin: 20px; 
 }
+
+
 
 
 /* ==========================================================================
