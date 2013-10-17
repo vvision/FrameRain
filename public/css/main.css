@@ -252,6 +252,10 @@ footer.Footer {
   transform: translateZ(0px);
 }
 
+.footerText {
+ margin: 20px; 
+}
+
 
 /* ==========================================================================
    Helper classes
