@@ -86,6 +86,7 @@ body {
 
 #main {
   margin-top: 115px;
+  margin-bottom: 65px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -102,7 +103,7 @@ body {
   right: 0px;
 }
 
-.loginContent, .addContent {
+.loginContent, .addContent, .userContent {
   margin: 0px 0px 5px;
   float: left;
   display: inline-block;
@@ -122,7 +123,7 @@ body {
   background: none repeat scroll 0% 0% rgb(64, 64, 64);
 }
 
-.password, .url  {
+.password, .url, .user  {
   display: inline-block;
   clear: both;
   margin: 0px;
@@ -167,12 +168,28 @@ body {
       text-decoration: none;
 }
 
-.addBox { 
+.addBox, .integrationBox { 
   max-width: 400px;
   margin: 0px auto;
   vertical-align: middle;
   left: 0px;
   right: 0px;
+}
+
+#site {
+  margin: 0px;
+  padding: 2px 0px 2px 8px;
+  width: 216px;
+  position: relative;
+  border: medium none;
+  color: rgb(255, 255, 255);
+  font-size: 1.1em;
+  font-weight: 200;
+  background: none repeat scroll 0% 0% rgb(64, 64, 64);
+}
+
+select, input, .radioButton {
+  margin: 5px 0px;
 }
 
 /*

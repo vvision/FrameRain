@@ -7,7 +7,7 @@ define([
 
 
 	return Backbone.View.extend({
-			
+		className: 'integrationBox',
 		initialize: function (options) {
 
 		},
@@ -16,9 +16,10 @@ define([
 			'click :button.userID': 'onClickUserID',
 		},
 		
-		onClickUserID: function () {
+		onClickUserID: function (e) {
 			var self = this;
-
+      e.preventDefault();
+      
 			//Display gif
 			$('.msg').empty().append('<img src="img/loader.gif" alt="loading"/>');
 			$.ajax({

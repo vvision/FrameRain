@@ -1,19 +1,22 @@
-<h1>Integration</h1>
-
 <div class="msg"></div>
 
+<p>Retrieve favorites from an existing account.</p>
+
 <div class="forms">
-		<form enctype="multipart/form-data" method='post'>
-			<select id="site" name="site">
-			<option value="1" selected>Youtube</option>
-			<option value="2">Dailymotion(Not Yet Supported)</option>
-			</select>
-			</br>
-			<input type="radio" name="option" value="0" checked="">Erase Previous</br>
-			<input type="radio" name="option" value="1">Append Favorites
-			</br>
-			<label for="user">UserID</label>
-			<input type="text" name="user" class="user" placeholder="User ID" size="42" />
-			<input type="button" value="Send" class="userID"/>
-		</form>
+	<form enctype="multipart/form-data" method='post'>
+		<select id="site" name="site">
+		  <option value="1" selected>Youtube</option>
+		  <!--<option value="2">Dailymotion(Not Yet Supported)</option>-->
+		</select>
+		</br>
+		<div class="radioButton">
+		  <input type="radio" name="option" value="0" checked=""> Erase Previous</input>
+		  <input type="radio" name="option" value="1"> Append Favorites</input>
+		</div>
+		
+		<div class="userContent">
+		  <input type="text" name="user" class="user" placeholder="User ID" size="42" />
+		  <button class="userID validation" type="Send">Send</button>
+		</div>
+	</form>
 </div>

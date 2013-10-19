@@ -8,7 +8,7 @@ define([
 
 
 	return Backbone.View.extend({
-	    className: 'addBox',
+	  className: 'addBox',
 		initialize: function () {
 		},
 			
