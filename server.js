@@ -11,7 +11,6 @@ var Video = mongoose.model('Video');
 //TODO: Conf. To be moved
 //TODO: Check existence of the public/img/ directory
 var port = 8080;
-var file = 'video.txt';
 
 app.use(express.logger());
 app.use(express.bodyParser({uploadDir:'./tmp'}));
@@ -101,7 +100,7 @@ app.post('/add', checkAuth, function (req, res, next) {
 
 function insert(el, cb) {
   el.save(function (err, data) {
-      if (err) console.log(err);
+    if (err) console.log(err);
     console.log(data);
     cb(err);
   });
@@ -109,8 +108,9 @@ function insert(el, cb) {
 
 //Remove a video from the list 
 //TODO: Should also remove the video from selection where it appears.
-app.post('/remove', /*checkAuth,*/ function (req, res, next) {
+app.get('/remove', /*checkAuth,*/ function (req, res, next) {
 	var id = req.query.video;
+	console.log(id);
 	if(id) {
       Video.remove({videoId: id}, function(err) {
           res.send('Removed!');
@@ -225,7 +225,7 @@ app.post('/integrate', checkAuth, function(req, res, next) {
 						if (!error && response.statusCode == 200) {
 							favorites = JSON.parse(body).feed.entry;//Array containing favorites
 							
-							//Adding each video to the existing list	//TODO: Option to erase previous list or merge!
+							//Adding each video to the existing list
 							async.forEach(favorites, function(el, cb) {		
 								//SAME AS IN /add
 								var remote = url.parse(el.link[0].href, true);
@@ -234,23 +234,23 @@ app.post('/integrate', checkAuth, function(req, res, next) {
 								var id;
 								if(remote.hostname === 'www.youtube.com') {
 								  id = remote.query.v;
-                                  getTitle('http://gdata.youtube.com/feeds/api/videos/' + id + '?v=2&alt=jsonc', function(videoTitle) {
-                                    link2Picture = 'https://i2.ytimg.com/vi/' + id + '/hqdefault.jpg';//hqdefault.jpg or sddefault.jpg
-                                    var video = new Video({
-                                        title: videoTitle,
-                                        site: 1,
-                                        videoId: id
-                                    });
-                                    
-                                    insert(video, function (err) {
-                                      if (err) throw err;
-                                      console.log('The "data to append" was insert in DB!' );
-                                      //Retireve picture and save
-                                      savePicture(link2Picture, id, function() {
-                                        next();
-                                      });
-                                    });
-                                  });
+                  getTitle('http://gdata.youtube.com/feeds/api/videos/' + id + '?v=2&alt=jsonc', function(videoTitle) {
+                    link2Picture = 'https://i2.ytimg.com/vi/' + id + '/hqdefault.jpg';//hqdefault.jpg or sddefault.jpg
+                    var video = new Video({
+                        title: videoTitle,
+                        site: 1,
+                        videoId: id
+                    });
+                    
+                    insert(video, function (err) {
+                      if (err) throw err;
+                      console.log('The "data to append" was insert in DB!' );
+                      //Retireve picture and save
+                      savePicture(link2Picture, id, function() {
+                        next();
+                      });
+                    });
+                  });
 								}
 							},
 							function(err) {

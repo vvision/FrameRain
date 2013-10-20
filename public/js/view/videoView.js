@@ -30,7 +30,8 @@ define([
 		events: {
 			'click .picture': 'playVideo',
 			'click .add': 'addToPlaylist',
-			'click .playSelection': 'playSelection'
+			'click .playSelection': 'playSelection',
+			'click .rm': 'removeVideo'
 		},
 		
 		playVideo: function (e) {
@@ -132,6 +133,29 @@ define([
 				$('.rm', this.el).css('visibility', 'hidden');
 			}
 		},
+		
+		removeVideo: function(e) {
+		  var className = e.currentTarget.className.split(' ');
+			var id = className[0].trim();
+			console.log(id);
+			
+			$.ajax({
+			  url: "/remove",
+			  type: "GET",
+			  data: {
+			    video: id
+			  },
+			  success: function (data) {
+				  console.log(data);
+				  //Remove video from the view
+				  $('.' + id + '').remove();	
+			  },
+			  error: function(err) {
+				  console.log(err);
+			  }
+			});
+	  
+	  },
 		
 		render: function () {
 			this.$el.html(Hogan.compile(VideoListTemplate).render({
