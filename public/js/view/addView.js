@@ -2,19 +2,24 @@ define([
   'jquery',
   'backbone',
   'hogan',
-  //'iframeTransport',
   'text!templates/add.html'
-], function($, Backbone, Hogan, /*iframeTransport,*/ AddTemplate) {
+], function($, Backbone, Hogan, AddTemplate) {
 
 
 	return Backbone.View.extend({
 	  className: 'addBox',
 		initialize: function () {
+		  
 		},
 			
 		events: {
 			'click :button.videoUrl': 'onClickVideo',
-			'click :button.selectionName': 'onClickSelection'
+			'click :button.selectionName': 'onClickSelection',
+		  'click .alert' : 'showHideAlert'
+		},
+		
+		showHideAlert: function() {
+		 $('.alert').fadeToggle('slow');
 		},
 		
 		onClickVideo: function (e) {
@@ -36,6 +41,10 @@ console.log($(':text.url').serializeArray());///////////////////////////////////
 				//processData: false,
 				success: function (res, status, jqXHR) {
 					$('.msg').empty().append(jqXHR.responseText);
+					//Show alert if hide.
+			    if($('.alert').css('display') == "none") {
+			      self.showHideAlert();
+			    }
 					$(':text.url').val('');
 				},
 				error: function (err) {
