@@ -1,12 +1,12 @@
-var express = require('express');
-var app = express();
-var fs = require('fs');
-var async = require('async');
-var url = require('url');
-var request = require('request');
-var db = require('./model/db');
-var mongoose = require('mongoose');
-var Video = mongoose.model('Video');
+var express = require('express')
+  , app = express()
+  , fs = require('fs')
+  , async = require('async')
+  , url = require('url')
+  , request = require('request')
+  , db = require('./model/db')
+  , mongoose = require('mongoose')
+  , Video = mongoose.model('Video');
 
 //TODO: Conf. To be moved
 //TODO: Check existence of the public/img/ directory
@@ -27,14 +27,12 @@ app.listen(port, 'localhost', function () {
   console.log('Server running on port ' + port);
 });
 
-//Auth
-//Function to add to routes
+//Requires auth for a route
 function checkAuth(req, res, next) {
 	if (req.session.authed) {
 		next();
 	} else {
-		//res.redirect('/');
-		res.send(401);
+    res.send(401);
 	}
 }
 
@@ -42,7 +40,7 @@ function checkAuth(req, res, next) {
 app.post('/auth', function (req, res, next) {
 	var login = req.body.login;
 	var password = req.body.password;
-console.log(login + ' ' + password);
+	
 	if (req.session.auth) {
        // Already logged in.
     } else {
@@ -50,7 +48,6 @@ console.log(login + ' ' + password);
 			if(err) console.log(err);//TODO Change
 	
 			var credential = JSON.parse(data);
-	console.log(credential);
 			if(login === credential.login && password === credential.password) {
 				req.session.username = login;
 				req.session.password = password;
@@ -69,18 +66,17 @@ app.post('/logout', checkAuth, function (req, res, next) {
 });
 
 //API
-//Add the url of the video to the file
+//Retrieve information and picture then store in db
 app.post('/add', checkAuth, function (req, res, next) {
-	var uri = req.body.url;
-	var str;
-	var remote = url.parse(uri, true);
-	console.log(remote);
-	var id;
+	var remote = url.parse(req.body.url, true)
+  , id
+  , video;
+	
 	if(remote.hostname === 'www.youtube.com') {
 		id = remote.query.v;
 		getTitle('http://gdata.youtube.com/feeds/api/videos/' + id + '?v=2&alt=jsonc', function(videoTitle) {
 			link2Picture = 'https://i2.ytimg.com/vi/' + id + '/hqdefault.jpg';//hqdefault.jpg or sddefault.jpg
-			var video = new Video({
+			video = new Video({
 			    title: videoTitle,
 			    site: 1,
 			    videoId: id
@@ -88,8 +84,8 @@ app.post('/add', checkAuth, function (req, res, next) {
 			
 			insert(video, function (err) {
 				if (err) throw err;
-				console.log('The "data to append" was insert in DB!' );
-				//Retireve picture and save
+				console.log('Just stored video with ID: ' + id + ' from ' + remote.hostname);
+				//Retireve picture and save it
 				savePicture(link2Picture, id, function() {
 					res.send(200);	
 				});
@@ -98,6 +94,7 @@ app.post('/add', checkAuth, function (req, res, next) {
 	}
 });
 
+//Insert data in db
 function insert(el, cb) {
   el.save(function (err, data) {
     if (err) console.log(err);
@@ -110,19 +107,18 @@ function insert(el, cb) {
 //TODO: Should also remove the video from selection where it appears.
 app.get('/remove', checkAuth, function (req, res, next) {
 	var id = req.query.video;
-	console.log(id);
 	if(id) {
-      Video.remove({videoId: id}, function(err) {
-          res.send('Removed!');
-      });
-    } else {
-      res.send('Missing parameter id!');
-    }
+    Video.remove({videoId: id}, function(err) {
+      res.send('Removed!');
+    });
+  } else {
+    res.send('Missing parameter id!');
+  }
 });
 
 //list video
 app.get('/listvideos', function (req, res, next) {
-    var start = req.query.start;
+  var start = req.query.start;
 	var limit = req.query.limit;
 	
 	Video.find(function (err, docs) {
@@ -136,71 +132,51 @@ app.post('/createselection', checkAuth, function(req, res, next) {
 	var name = req.body.selectionName;
 console.log(name);
 	if(name) {
-		fs.writeFile('selection/' + name, '', function (err) {
-  		if (err) throw err;
-console.log('It\'s saved!');
-  		res.send(200);
-		});
+    res.send(200);
 	}
 });
 
 //Return the list of the existing selection
 app.get('/selections', function(req, res, next) {
-	fs.readdir('selection', function (err, files) {
-		if(!files) res.send('NULL');
-console.log(files);
-		res.send(files);
-	});
+	res.send(200);
 });
 
 //Add a video to an existing selection
 app.post('/addtoselection', checkAuth, function(req, res, next) {
 	var videoId = req.body.idVideo;
 	var selectionId = req.body.idSeletion;
-	fs.writeFile('selection/' + selectionId, videoId + ',', function (err) {
- 		if (err) throw err;
-console.log('It\'s saved!');
- 		res.send(200);
-	});
+	
+ 	res.send(200);
 });
 
 //Get all videos related to a selection
 app.get('/getselection', function(req, res, next) {
 		console.log(req);
 	var selectionName = req.query.idSelection;
-	fs.readFile('selection/' + selectionName, function (err, data) {
-		if (err) throw err;
-		console.log(data);
-		res.send(data);
-	});
+
+	res.send(200);
 });
 
 //Delete an existing selection
 app.get('/deleteselection', function(req, res, next) {
 	var selectionName = req.body.idSelection;
-	fs.unlink('selection/' + selectionName, function (err) {
-  	if (err) throw err;
-  	console.log('successfully deleted /selection/' + selectionName);
-		res.send(200);
-	});
+  res.send(200);
 });
 
 //Integrate existing list from an existing website
 //option: 0 -> Erase previous favorites. 1 -> Append
 app.post('/integrate', checkAuth, function(req, res, next) {
-	var userId= req.body.userId;
-	var site = req.body.site;
-	var option = req.body.option;
-	var link1;
-	var links = [];
-	var favorites;
-	var total;
+	var userId= req.body.userId
+	, site = req.body.site
+	, option = req.body.option
+	, link1
+	, links = []
+	, favorites
+	, total;
 
 	if(option == 0) {
 		//Erase previous content of the file
-		Video.remove({}, function() {
-		
-		});
+		Video.remove({}, function() {});
 	}
 	
 	if(site == 1) {
@@ -256,11 +232,8 @@ app.post('/integrate', checkAuth, function(req, res, next) {
 							function(err) {
 								res.send('error');
 							});
-							
-							//res.send(favorites);
 						}
 					});
-
 				},
 				function(err) {
 					res.send('error');
