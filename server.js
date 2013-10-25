@@ -108,7 +108,7 @@ function insert(el, cb) {
 
 //Remove a video from the list 
 //TODO: Should also remove the video from selection where it appears.
-app.get('/remove', /*checkAuth,*/ function (req, res, next) {
+app.get('/remove', checkAuth, function (req, res, next) {
 	var id = req.query.video;
 	console.log(id);
 	if(id) {
