@@ -13,9 +13,9 @@ define([
 		},
 			
 		events: {
-			'click :button.videoUrl': 'onClickVideo',
-			'click :button.selectionName': 'onClickSelection',
-		  'click .alert' : 'showHideAlert'
+		  'click :button.videoUrl': 'onClickVideo',
+		  'click :button.selectionName': 'onClickSelection',
+		  'click .close' : 'showHideAlert'
 		},
 		
 		showHideAlert: function() {
@@ -25,11 +25,7 @@ define([
 		onClickVideo: function (e) {
 			var self = this;
 			e.preventDefault();
-console.log($(':text.url').serializeArray());//////////////////////////////////////////////////////////
 			var params = $(':text.url').serializeArray();	
-			//params.push({name: "login", value: sessionStorage.getItem("login")});
-			//params.push({name: "password", value: sessionStorage.getItem("password")});
-			//params.push({name: "token", value: sessionStorage.getItem("token")});
 
 			//Display gif
 			$('.msg').empty().append('<img src="img/loader.gif" alt="loading"/>');
@@ -37,14 +33,12 @@ console.log($(':text.url').serializeArray());///////////////////////////////////
 				url: '/add',
 				type: 'POST',				
 				data: params,
-				//iframe: true,
-				//processData: false,
-				success: function (res, status, jqXHR) {
-					$('.msg').empty().append(jqXHR.responseText);
+				success: function (res, status) {
+					$('.msg').empty().append("Video saved!");
 					//Show alert if hide.
-			    if($('.alert').css('display') == "none") {
-			      self.showHideAlert();
-			    }
+                    if($('.alert').css('display') == "none") {
+                      self.showHideAlert();
+                    }
 					$(':text.url').val('');
 				},
 				error: function (err) {
@@ -55,37 +49,12 @@ console.log($(':text.url').serializeArray());///////////////////////////////////
 		
 		onClickSelection: function () {
 			var self = this;
-			
-console.log($(':text.selectionName').serializeArray());//////////////////////////////////////////////////////////
-			var params = $(':text.selectionName').serializeArray();	
-			//params.push({name: "login", value: sessionStorage.getItem("login")});
-			//params.push({name: "password", value: sessionStorage.getItem("password")});
-			//params.push({name: "token", value: sessionStorage.getItem("token")});
-
-			//Display gif
-			$('.msg').empty().append('<img src="img/loader.gif" alt="loading"/>');
-			$.ajax({
-				url: '/createselection',
-				type: 'POST',				
-				data: params,
-				//iframe: true,
-				//processData: false,
-				success: function (res, status, jqXHR) {
-					$('.msg').empty().append(jqXHR.responseText);
-					$(':text.selectionName').val('');
-				},
-				error: function (err) {
-					console.log(err);
-				}
-			});
 		},
 	
 		render: function () {
 			this.$el.html(Hogan.compile(AddTemplate).render({
-				add: 'ADD',
+				add: 'Add',
 				url: 'Url',
-				send: 'Send',
-				urlSample: 'Ex: http://www.youtube.com/watch?v=aHjpOzsQ9YI'
 			}));
 
 			return this;

@@ -92,7 +92,7 @@ body {
 }
    
 /*
-** LOGIN
+** Login
 */
 
 .loginBox { 
@@ -193,7 +193,7 @@ select, input, .radioButton {
 }
 
 /*
-** VIDEOLIST
+** Videolist
 */
 
 .auth {
@@ -254,7 +254,7 @@ header  {
 }
 
 /*
-** PLAYLIST
+** Playlist
 */
 .playlist  {
   position: fixed;
@@ -321,7 +321,7 @@ header  {
 }
 
 /*
-** PLAYER
+** Player
 */
 
 .playing {
@@ -332,7 +332,7 @@ header  {
 
 
 /*
-** FOOTER
+** Footer
 */
 footer.Footer {
   text-align: center;
@@ -355,6 +355,25 @@ footer.Footer {
  margin: 20px; 
 }
 
+/*
+** Alert
+*/
+
+.alert {
+  margin: 35px 0px;
+  border: 1px solid rgb(74, 74, 74);
+  padding: 10px;
+  max-width: 300px;
+}
+
+.close {
+  float: right;
+}
+
+.msg {
+  display: inline-block;
+  margin: 0px auto;
+}
 
 
 

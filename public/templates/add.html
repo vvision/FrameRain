@@ -1,24 +1,14 @@
-
-<div class="alert" style="display: none">
-  <span class="msg"></span>
-  <button type="button" class="close" data-dismiss="alert">&times;</button>
-</div>
-
 <div class="forms">
 	<form enctype="multipart/form-data" novalidate="novalidate"  method='post'>
 	  <div class="addContent">
-	    <input type="text" name="url" class="url" autocorrect="off"  placeholder="Url"/>
-	    <button class="videoUrl validation" type="submit">Add</button>
+	    <input type="text" name="url" class="url" autocorrect="off"  placeholder="{{url}}"/>
+	    <button class="videoUrl validation" type="submit">{{add}}</button>
 	  </div>
 	</form>
 </div>
-<!--
-<div class="forms">
-		<form enctype="multipart/form-data" method='post'>
-		<label for="selectionName">Nom de la Selection</label>
-		<input type="text" name="selectionName" class="selectionName" placeholder="Ex: Cats" size="42" />
-		<input type="button" value="{{send}}" class="selectionName"/>
-		</form>
+<br/>
+<div class="alert" style="display: none">
+  <div class="msg"></div>
+  <img class="close" src="./../css/img/x_14x14.png"/>
 </div>
--->
 
