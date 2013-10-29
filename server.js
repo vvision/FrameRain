@@ -185,61 +185,65 @@ app.post('/integrate', checkAuth, function(req, res, next) {
 		request(link1, function (error, response, body) {
 			if (!error && response.statusCode == 200) {
 				total = JSON.parse(body).feed.openSearch$totalResults.$t;
-				console.log('TOTAL:' + total);
-				var j = 1;
-				do {
-					links.push('http://gdata.youtube.com/feeds/api/users/' + userId + '/favorites?alt=json&max-results=50&start-index=' + j);
-					j += 50;
-				} while(j <= total);
-				console.log(links);
-				
-				
-				//Let's retrieve all favorites!
-				async.forEach(links, function(element, cb) {		
-						
-					request(element, function (error, response, body) {
-						if (!error && response.statusCode == 200) {
-							favorites = JSON.parse(body).feed.entry;//Array containing favorites
-							
-							//Adding each video to the existing list
-							async.forEach(favorites, function(el, cb) {		
-								//SAME AS IN /add
-								var remote = url.parse(el.link[0].href, true);
-								console.log(remote);
-								var title;
-								var id;
-								if(remote.hostname === 'www.youtube.com') {
-								  id = remote.query.v;
-                  getTitle('http://gdata.youtube.com/feeds/api/videos/' + id + '?v=2&alt=jsonc', function(videoTitle) {
-                    link2Picture = 'https://i2.ytimg.com/vi/' + id + '/hqdefault.jpg';//hqdefault.jpg or sddefault.jpg
-                    var video = new Video({
-                        title: videoTitle,
-                        site: 1,
-                        videoId: id
+				//Check if there are some videos to retrieve
+				if(total == 0) {
+				  res.send('No videos found.');
+				} else {
+                  var j = 1;
+                  do {
+                    links.push('http://gdata.youtube.com/feeds/api/users/' + userId + '/favorites?alt=json&max-results=50&start-index=' + j);
+                    j += 50;
+                  } while(j <= total);
+                  console.log(links);
+                  
+                  
+                  //Let's retrieve all favorites!
+                  async.forEach(links, function(element, cb) {		
+                      
+                    request(element, function (error, response, body) {
+                      if (!error && response.statusCode == 200) {
+                        favorites = JSON.parse(body).feed.entry;//Array containing favorites
+                        
+                        //Adding each video to the existing list
+                        async.forEach(favorites, function(el, cb) {		
+                          //SAME AS IN /add
+                          var remote = url.parse(el.link[0].href, true);
+                          console.log(remote);
+                          var title;
+                          var id;
+                          if(remote.hostname === 'www.youtube.com') {
+                            id = remote.query.v;
+                            getTitle('http://gdata.youtube.com/feeds/api/videos/' + id + '?v=2&alt=jsonc', function(videoTitle) {
+                              link2Picture = 'https://i2.ytimg.com/vi/' + id + '/hqdefault.jpg';//hqdefault.jpg or sddefault.jpg
+                              var video = new Video({
+                                  title: videoTitle,
+                                  site: 1,
+                                  videoId: id
+                              });
+                              
+                              insert(video, function (err) {
+                                if (err) throw err;
+                                console.log('The "data to append" was insert in DB!' );
+                                //Retireve picture and save
+                                savePicture(link2Picture, id, function() {
+                                  next();
+                                });
+                              });
+                            });
+                          }
+                        },
+                        function(err) {
+                          res.send('error');
+                        });
+                      }
                     });
-                    
-                    insert(video, function (err) {
-                      if (err) throw err;
-                      console.log('The "data to append" was insert in DB!' );
-                      //Retireve picture and save
-                      savePicture(link2Picture, id, function() {
-                        next();
-                      });
-                    });
+                  },
+                  function(err) {
+                    res.send('error');
                   });
-								}
-							},
-							function(err) {
-								res.send('error');
-							});
-						}
-					});
-				},
-				function(err) {
-					res.send('error');
-				});
-				res.send(200);
-			}
+                  res.send(200);
+                }
+              }
 		});
 		
 	} else {
