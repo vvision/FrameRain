@@ -2,7 +2,7 @@ FrameRain
 =========
 
 FrameRain is a way to manage your favorite videos, keeping data on your own server.
-Work only with Youtube videos for now. 
+Works only with Youtube videos for now. 
 
 Installation
 ============
