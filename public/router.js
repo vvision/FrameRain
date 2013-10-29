@@ -1,9 +1,9 @@
 requirejs.config({
   //baseUrl: '/',
   config: {
-  	 i18n: {
-  		locale: localStorage.getItem('locale') || 'en',
-  	 }
+    i18n: {
+      locale: localStorage.getItem('locale') || 'en'
+    }
   },
   paths: {
     'backbone': 'js/lib/backbone',
@@ -22,16 +22,16 @@ requirejs.config({
       exports: 'Backbone'
     },
     'jquery': {
-    	exports: '$'
+      exports: '$'
     },
     'iframeTransport': {
-    	deps: ['jquery']
+      deps: ['jquery']
     },
     'youtubePlayer': {
-    	deps: ['jquery']
+      deps: ['jquery']
     },
     'underscore': {
-    	exports: '_'
+      exports: '_'
     }
   }
 });
@@ -47,9 +47,9 @@ define([
   'js/view/integrationView',
   'js/view/playlistView'
 ], function(Backbone, HeaderView, VideoView, SelectionView, AddView, PlayVideoView, LoginView, IntegrationView, PlaylistView) {
-	
-		var Video = Backbone.Model.extend({
-		defaults: {
+  
+    var Video = Backbone.Model.extend({
+    defaults: {
             site: 0,
             videoId: null,
             title: null
@@ -57,73 +57,67 @@ define([
     });
   
   var VideoList = Backbone.Collection.extend({
-  	model: Video		
+    model: Video    
   });
   
   var list = new VideoList();
    var playlist = new VideoList();
 
-	var Router = Backbone.Router.extend({
-		routes: {
-			"": "video",
-			"add": "add",
-			"selection":	"selection",
-			"play/:id": "playVideo",
-			"play": "playVideo",
-			"login": "login",
-			"integration": "integration",
-			":name": "video"
-		},
-	
-		video: function (name) {
-			$('#header').html(new HeaderView().render().el);
-			$('.playlistPosition').html(new PlaylistView({playlist: playlist}).render().el);
-			$('#main').html(new VideoView({id: name, list: list, playlist: playlist}).render().el);
-		},
-		playVideo: function (id) {
-			$('#header').html(new HeaderView().render().el);
-			$('.playlistPosition').html(new PlaylistView({playlist: playlist}).render().el);
-			$('#main').html(new PlayVideoView({id: id, list: list, playlist: playlist}).render().el);
-		},
-		add: function () {
-			$('#header').html(new HeaderView().render().el);
-			$('.playlistPosition').html(new PlaylistView({playlist: playlist}).render().el);
-			$('#main').html(new AddView().render().el);
-		},
-		selection: function () {
-			$('#header').html(new HeaderView().render().el);
-			$('.playlistPosition').html(new PlaylistView({playlist: playlist}).render().el);
-			$('#main').html(new SelectionView({playlist: playlist}).render().el);
-		},
-		integration: function () {
-			$('#header').html(new HeaderView().render().el);
-			$('.playlistPosition').html(new PlaylistView({playlist: playlist}).render().el);
-			$('#main').html(new IntegrationView().render().el);
-		},
-		login: function () {
-			$('#header').html(new HeaderView().render().el);
-			$('.playlistPosition').html(new PlaylistView({playlist: playlist}).render().el);
-			$('#main').html(new LoginView().render().el);
-		}
-	});
-	
-	window.router = new Router();
-	
-	Backbone.history.start({pushState: true});
-	
-	$('body').on('click', 'a', function(e){
-		// If you have external links handle it here
-		e.preventDefault();
-		var $a = $(e.target).closest('a');
-		var href = $a.attr('href');
+  var Router = Backbone.Router.extend({
+      
+    initialize: function () {
+      $('#header').html(new HeaderView().render().el);
+      $('.playlistPosition').html(new PlaylistView({playlist: playlist}).render().el);
+    },
+  
+    routes: {
+      "": "video",
+      "add": "add",
+      "selection":  "selection",
+      "play/:id": "playVideo",
+      "play": "playVideo",
+      "login": "login",
+      "integration": "integration",
+      ":name": "video"
+    },
+  
+    video: function (name) {
+      $('#main').html(new VideoView({id: name, list: list, playlist: playlist}).render().el);
+    },
+    playVideo: function (id) {
+      $('#main').html(new PlayVideoView({id: id, list: list, playlist: playlist}).render().el);
+    },
+    add: function () {
+      $('#main').html(new AddView().render().el);
+    },
+    selection: function () {
+      $('#main').html(new SelectionView({playlist: playlist}).render().el);
+    },
+    integration: function () {
+      $('#main').html(new IntegrationView().render().el);
+    },
+    login: function () {
+      $('#main').html(new LoginView().render().el);
+    }
+  });
+  
+  window.router = new Router();
+  
+  Backbone.history.start({pushState: true});
+  
+  $('body').on('click', 'a', function(e){
+    // If you have external links handle it here
+    e.preventDefault();
+    var $a = $(e.target).closest('a');
+    var href = $a.attr('href');
 
-		if(href === '#') return; // Escape the null link
-		if(href.indexOf('http') != -1) return; // Escape external links
-		if(href.indexOf('mailto') != -1) return; // Escape external links
-		if( (href === 'conf' || href === 'add') && window.login && window.password && window.token) {
-			return;
-		} else {
-			router.navigate(href, true);
-		}
-	});
+    if(href === '#') return; // Escape the null link
+    if(href.indexOf('http') != -1) return; // Escape external links
+    if(href.indexOf('mailto') != -1) return; // Escape external links
+    if( (href === 'conf' || href === 'add') && window.login && window.password && window.token) {
+      return;
+    } else {
+      router.navigate(href, true);
+    }
+  });
 });
