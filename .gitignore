@@ -1,7 +1,3 @@
 *.*~
 node_modules/
-tmp/
-log/
-video.txt
-public/img/
-selection/
+public/img/*.jpg

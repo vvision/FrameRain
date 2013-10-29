@@ -6,14 +6,10 @@ var express = require('express')
   , request = require('request')
   , db = require('./model/db')
   , mongoose = require('mongoose')
-  , Video = mongoose.model('Video');
-
-//TODO: Conf. To be moved
-//TODO: Check existence of the public/img/ directory
-var port = 8080;
+  , Video = mongoose.model('Video')
+  , conf = require('./config');
 
 app.use(express.logger());
-app.use(express.bodyParser({uploadDir:'./tmp'}));
 //app.use(express.favicon(__dirname + '/public/favicon.ico'))
 app.use(express.cookieParser());
 app.use(express.cookieSession({ secret: 'ASYDctgfeDKFLS646', cookie: { maxAge: 60 * 60 * 1000 }}));
@@ -23,8 +19,8 @@ app.use(function(req, res) {
     fs.createReadStream( './public/index.html').pipe(res);
 });
 
-app.listen(port, 'localhost', function () {
-  console.log('Server running on port ' + port);
+app.listen(conf.port, 'localhost', function () {
+  console.log('Server running on port ' + conf.port);
 });
 
 //Requires auth for a route
@@ -44,19 +40,14 @@ app.post('/auth', function (req, res, next) {
 	if (req.session.auth) {
        // Already logged in.
     } else {
-		fs.readFile('passwd.json', {'encoding': 'utf8'},function (err, data) {
-			if(err) console.log(err);//TODO Change
-	
-			var credential = JSON.parse(data);
-			if(login === credential.login && password === credential.password) {
-				req.session.username = login;
-				req.session.password = password;
-				req.session.authed = true;
-				res.send('OK');
-			} else {
-				res.send(403);
-			}
-		});
+      if(login === conf.login && password === conf.password) {
+        req.session.username = login;
+        req.session.password = password;
+        req.session.authed = true;
+        res.send('OK');
+      } else {
+        res.send(403);
+      }
 	}
 });
 
@@ -81,7 +72,6 @@ app.post('/add', checkAuth, function (req, res, next) {
 });
 
 //Remove a video from the list 
-//TODO: Should also remove the video from selection where it appears.
 app.get('/remove', checkAuth, function (req, res, next) {
 	var id = req.query.video;
 	if(id) {
@@ -93,7 +83,7 @@ app.get('/remove', checkAuth, function (req, res, next) {
   }
 });
 
-//list video
+//List video
 app.get('/listvideos', function (req, res, next) {
   var start = req.query.start;
 	var limit = req.query.limit;
@@ -172,8 +162,7 @@ app.post('/integrate', checkAuth, function(req, res, next) {
                     j += 50;
                   } while(j <= total);
                   //console.log(links);
-                  
-                  
+
                   //Let's retrieve all favorites!
                   async.forEach(links, function(element, cb) {		                 
                     request(element, function (error, response, body) {
