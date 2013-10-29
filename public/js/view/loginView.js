@@ -13,49 +13,53 @@ define([
 		},
 			
 		events: {
-			'click button.validation': 'tryAuth' 
+			'click button.validation': 'tryAuth',
+			'click .close' : 'showHideAlert'
+		},
+
+		showHideAlert: function() {
+		 $('.alert').fadeToggle('slow');
 		},
 		
 		tryAuth: function (e) {
-		    e.preventDefault();
-			console.log('click');
-			$.ajax({
-				url: '/auth' ,
-				type: 'POST',
-				data: {
-					login: $('.login').val(),
-					password: $('.password').val()
-				},
-				success: function (data) {
-					//TODO Store token (and login + password?) in a global area.
-					//window.token = data;
-					//window.login = $('.login').val();
-					//window.password = $('.password').val();
-					//OK, let's another thing
-					//localStorage.setItem('token', data);
-					//localStorage.setItem('login', $('.login').val());
-					//localStorage.setItem('password', $('.password').val());
-					sessionStorage.setItem('login', $('.login').val());
-					sessionStorage.setItem('password', $('.password').val());
-					console.log(data);
-					$('.credential').text(sessionStorage.getItem("login"));
-					//Change CSS to display links and infos (do it one to show we are logged in)
-					$('.auth').css('visibility', 'visible');
-					$('.loginLink', this.el).css('visibility', 'hidden');
-					//Change view to show login is complete
-					router.navigate('/', true);
-				},
-				error: function(err) {
-					console.log(err);
-				}
-			});
+		  var self = this;
+		  
+          e.preventDefault();
+          console.log('click');
+          $.ajax({
+            url: '/auth' ,
+            type: 'POST',
+            data: {
+              login: $('.login').val(),
+              password: $('.password').val()
+            },
+            success: function (data) {
+              sessionStorage.setItem('login', $('.login').val());
+              sessionStorage.setItem('password', $('.password').val());
+              console.log(data);
+              $('.credential').text(sessionStorage.getItem("login"));
+              //Change CSS to display links and infos (show we are logged in)
+              $('.auth').css('visibility', 'visible');
+              $('.loginLink', this.el).css('visibility', 'hidden');
+              //Change view
+              router.navigate('/', true);
+            },
+            error: function(err) {
+              $('.msg').empty().append('Incorrect login or password.');
+              //Show alert if hidden.
+              if($('.alert').css('display') == "none") {
+                self.showHideAlert();
+              }
+              $('.password').val('');
+            }
+          });
 		},
 		
 		render: function () {
 			this.$el.html(Hogan.compile(LoginTemplate).render({
-				login: 'login',
-				password: 'password',
-				connect: 'connect'
+				username: 'Username',
+				password: 'Password',
+				log: 'Log in'
 			}));
 			return this;
 		}

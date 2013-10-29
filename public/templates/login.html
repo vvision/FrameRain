@@ -1,13 +1,14 @@
-
-<div class="msg"></div>
-
-
 <div class="forms">
 		<form enctype="multipart/form-data" novalidate="novalidate" method='post'>
 		<div class="loginContent">
-		<input type="text" name="login" class="login"  autocorrect="off" placeholder="Username" />
-		<input type="password" name="password" class="password" placeholder="Password"/>
+		<input type="text" name="login" class="login"  autocorrect="off" placeholder="{{username}}" />
+		<input type="password" name="password" class="password" placeholder="{{password}}"/>
 		</div>
-		<button class="validation" type="submit">Log in</button>
+		<button class="validation" type="submit">{{log}}</button>
 		</form>
+</div>
+<br/>
+<div class="alert" style="display: none">
+  <div class="msg"></div>
+  <img class="close" src="./../css/img/x_14x14.png"/>
 </div>

@@ -28,14 +28,14 @@ define([
 			var params = $(':text.url').serializeArray();	
 
 			//Display gif
-			$('.msg').empty().append('<img src="img/loader.gif" alt="loading"/>');
+			$('.msg').empty().append('Loading');
 			$.ajax({
 				url: '/add',
 				type: 'POST',				
 				data: params,
 				success: function (res, status) {
 					$('.msg').empty().append("Video saved!");
-					//Show alert if hide.
+					//Show alert if hidden.
                     if($('.alert').css('display') == "none") {
                       self.showHideAlert();
                     }
