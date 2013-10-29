@@ -1,27 +1,28 @@
 {
-  "name": "LumiereJs",               
-  "version": "0.0.1",
-  "author": "vvision <email></email>",
-  "description": "LumiereJs is a way to manage your favorite videos, make playlist, keeping data on your own server.",
-  "license": "GNU GPL3",                           
+  "name": "FrameRain",               
+  "version": "0.1.0",
+  "author": "Victor Voisin <email>vvision@sfr.fr</email>",
+  "description": "FrameRain is a way to manage your favorite videos, keeping data on your own server.",
+  "license": "MIT",                           
   "engine": {                               
-    "node": "&gt;=0.4"
+    "node": "&gt;=0.10"
+  },         
+  "scripts": {
+    "start": "node ./server.js",
+    "test": "mocha -R spec ./test/*.js"
   },
-  "main": "./lib/example.js",                
-  "bin": {
-    "my-command": "./bin/example"             
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vvision/FrameRain.git"
   },
   "dependencies" : {                      
     "express": "3.0",
-    "async": "0.1.18"
-  },
-  "devDependencies": {                       
-    "mocha": "1.2.0",                       
-    "chai": "1.0.4",
+    "async": "0.1.18",
     "request": "",
     "mongoose": ""
   },
-  "scripts": {                    
-    "test": " mocha -R spec ./test/*.js"
+  "devDependencies": {                       
+    "mocha": "1.2.0",                       
+    "chai": "1.0.4"
   }
 }
