@@ -10,6 +10,7 @@ var express = require('express')
   , conf = require('./config');
 
 app.use(express.logger());
+app.use(express.bodyParser());
 //app.use(express.favicon(__dirname + '/public/favicon.ico'))
 app.use(express.cookieParser());
 app.use(express.cookieSession({ secret: 'ASYDctgfeDKFLS646', cookie: { maxAge: 60 * 60 * 1000 }}));
