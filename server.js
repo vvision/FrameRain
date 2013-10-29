@@ -74,34 +74,11 @@ app.post('/add', checkAuth, function (req, res, next) {
 	
 	if(remote.hostname === 'www.youtube.com') {
 		id = remote.query.v;
-		getTitle('http://gdata.youtube.com/feeds/api/videos/' + id + '?v=2&alt=jsonc', function(videoTitle) {
-			link2Picture = 'https://i2.ytimg.com/vi/' + id + '/hqdefault.jpg';//hqdefault.jpg or sddefault.jpg
-			video = new Video({
-			    title: videoTitle,
-			    site: 1,
-			    videoId: id
-			});
-			
-			insert(video, function (err) {
-				if (err) throw err;
-				console.log('Just stored video with ID: ' + id + ' from ' + remote.hostname);
-				//Retireve picture and save it
-				savePicture(link2Picture, id, function() {
-					res.send(200);	
-				});
-			});
+		retrieveFromYoutube(id, function() {
+		  res.send(200);
 		});
 	}
 });
-
-//Insert data in db
-function insert(el, cb) {
-  el.save(function (err, data) {
-    if (err) console.log(err);
-    console.log(data);
-    cb(err);
-  });
-}
 
 //Remove a video from the list 
 //TODO: Should also remove the video from selection where it appears.
@@ -194,12 +171,11 @@ app.post('/integrate', checkAuth, function(req, res, next) {
                     links.push('http://gdata.youtube.com/feeds/api/users/' + userId + '/favorites?alt=json&max-results=50&start-index=' + j);
                     j += 50;
                   } while(j <= total);
-                  console.log(links);
+                  //console.log(links);
                   
                   
                   //Let's retrieve all favorites!
-                  async.forEach(links, function(element, cb) {		
-                      
+                  async.forEach(links, function(element, cb) {		                 
                     request(element, function (error, response, body) {
                       if (!error && response.statusCode == 200) {
                         favorites = JSON.parse(body).feed.entry;//Array containing favorites
@@ -210,39 +186,25 @@ app.post('/integrate', checkAuth, function(req, res, next) {
                           var remote = url.parse(el.link[0].href, true);
                           console.log(remote);
                           var title;
-                          var id;
                           if(remote.hostname === 'www.youtube.com') {
-                            id = remote.query.v;
-                            getTitle('http://gdata.youtube.com/feeds/api/videos/' + id + '?v=2&alt=jsonc', function(videoTitle) {
-                              link2Picture = 'https://i2.ytimg.com/vi/' + id + '/hqdefault.jpg';//hqdefault.jpg or sddefault.jpg
-                              var video = new Video({
-                                  title: videoTitle,
-                                  site: 1,
-                                  videoId: id
-                              });
-                              
-                              insert(video, function (err) {
-                                if (err) throw err;
-                                console.log('The "data to append" was insert in DB!' );
-                                //Retireve picture and save
-                                savePicture(link2Picture, id, function() {
-                                  next();
-                                });
-                              });
+                            retrieveFromYoutube(remote.query.v, function() {
+                              next();
                             });
                           }
                         },
                         function(err) {
-                          res.send('error');
+                          res.send('Error');
                         });
                       }
                     });
                   },
                   function(err) {
-                    res.send('error');
+                    res.send('Error');
                   });
                   res.send(200);
                 }
+              } else if(response.statusCode == 404) {
+                res.send('User not found.');
               }
 		});
 		
@@ -252,6 +214,25 @@ app.post('/integrate', checkAuth, function(req, res, next) {
 
 });
 
+function retrieveFromYoutube(id, callback) {
+  getTitle('http://gdata.youtube.com/feeds/api/videos/' + id + '?v=2&alt=jsonc', function(videoTitle) {
+    video = new Video({
+        title: videoTitle,
+        site: 1,
+        videoId: id
+    });
+    
+    insert(video, function (err) {
+      if (err) throw err;
+      console.log('Just stored video with ID: ' + id + ' from Youtube. ' );
+      //Retireve picture and save it. Available: hqdefault.jpg or sddefault.jpg
+      savePicture( 'https://i2.ytimg.com/vi/' + id + '/hqdefault.jpg', id, function() {
+        callback();	
+      });
+    });
+  });
+}
+
 function savePicture(link, id, cb) {
   request(link).pipe(fs.createWriteStream('./public/img/' + id + '.jpg'));
   request(link).on("end", function() {
@@ -259,6 +240,7 @@ function savePicture(link, id, cb) {
   });
 }
 
+//Work with youtube
 function getTitle(link, callback) {
 	request(link, function (error, response, body) {
 		if (!error && response.statusCode == 200) {
@@ -266,4 +248,13 @@ function getTitle(link, callback) {
 		}
 		callback(title);
 	});
+}
+
+//Insert data in db
+function insert(el, cb) {
+  el.save(function (err, data) {
+    if (err) console.log(err);
+    console.log(data);
+    cb(err);
+  });
 }
