@@ -1,10 +1,5 @@
 requirejs.config({
   //baseUrl: '/',
-  config: {
-    i18n: {
-      locale: localStorage.getItem('locale') || 'en'
-    }
-  },
   paths: {
     'backbone': 'js/lib/backbone',
     'jquery': 'js/lib/jquery-1.8.2.min',
@@ -13,7 +8,6 @@ requirejs.config({
     'text': 'js/lib/text-2.0.3',
     'mocha': 'js/lib/mocha',
     'hogan': 'js/lib/hogan-3.0.0.amd',
-    'i18n': 'i18n',
     'youtubePlayer': 'js/lib/youtubePlayer'
   },
   shim: {
